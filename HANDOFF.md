@@ -28,7 +28,7 @@ decision). None of it blocks the code.
 | 5 Hardening | Offline full game, update behaviour, audit of every screen, viewport matrix (Chromium and WebKit), touch gestures, robustness and accessibility checks pass. See `DECISIONS.md` for load and frame-time numbers. |
 | 6 Release | See the end of `Plan.md` (release checklist). |
 
-Full-suite counts at the time of writing are in the "Final verification" entry of `DECISIONS.md`.
+Final check (clean clone, every command in `CLAUDE.md`): 125 Flutter tests, 43 pipeline tests (+1 that needs the raw download), 28 end-to-end tests (23 Chromium, 5 WebKit), all passing, and rebuilding the data pack from a fresh download reproduces the committed pack exactly. Details in the "FINAL VERIFICATION" entry of `DECISIONS.md`.
 
 ## 3. Real-tablet test plan (HUMAN)
 

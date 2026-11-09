@@ -281,27 +281,27 @@ Architecture notes (see Appendix E for the layout). Use plain Dart classes for l
 
 ## Phase 6 — Release and handoff
 
-- [ ] 6.1 Finalize `README.md`: what the game is, how to run everything with Docker, how to regenerate data, how to run tests, how the deploy works, data sources and licences, known limitations.
-- [ ] 6.2 Add `LICENSE` for the code (default **MIT**, logged as an assumption for the owner to confirm) and keep data attribution in `DATA_LICENSES.md` and About.
-- [ ] 6.3 Complete the Pages workflow: it must build with the repo name as the base href, run the test suite in containers first, then deploy. Do a dry run of the build step locally with `BASE_HREF=/hundred-block/`.
-- [ ] 6.4 Clean clone check: clone the repo to a temp directory (inside a container if needed), run `docker compose build`, then the full command list from `CLAUDE.md`. Fix anything that depended on local state.
-- [ ] 6.5 Write `HANDOFF.md`: remaining HUMAN steps (below), every assumption from Appendix D with a one-line "change it here" pointer, known issues, `BLOCKED` items, and the results of the exit criteria.
-- [ ] 6.6 Tag `v0.1.0` locally.
+- [x] 6.1 Finalize `README.md`: what the game is, how to run everything with Docker, how to regenerate data, how to run tests, how the deploy works, data sources and licences, known limitations.
+- [x] 6.2 Add `LICENSE` for the code (default **MIT**, logged as an assumption for the owner to confirm) and keep data attribution in `DATA_LICENSES.md` and About.
+- [x] 6.3 Complete the Pages workflow: it must build with the repo name as the base href, run the test suite in containers first, then deploy. Do a dry run of the build step locally with `BASE_HREF=/hundred-block/`.
+- [x] 6.4 Clean clone check: clone the repo to a temp directory (inside a container if needed), run `docker compose build`, then the full command list from `CLAUDE.md`. Fix anything that depended on local state.
+- [x] 6.5 Write `HANDOFF.md`: remaining HUMAN steps (below), every assumption from Appendix D with a one-line "change it here" pointer, known issues, `BLOCKED` items, and the results of the exit criteria.
+- [x] 6.6 Tag `v0.1.0` locally.
 
 ### Release checklist (mirrors the PRD "done" list)
 
-- [ ] Plays start to finish in the browser; verified in Chromium (and WebKit if available) automatically, and on a Windows tablet and an Android tablet made in 2021 or later (`HUMAN`, instructions in `HANDOFF.md`).
-- [ ] Home, Play, a choice of 10, 25 or 50 rounds, the rounds and the summary all work for every length.
-- [ ] The map shows only the street outline, Costco and the six highlighted streets, with free pan and zoom.
-- [ ] Rounds use real Burbank addresses and intersections, with no repeats in one game.
-- [ ] Scoring matches the formula and the table, checked by unit tests.
-- [ ] Stats show best score per length, averages for all time and the last 10 games, and per-tier history; the JSON export downloads a valid file in the proposed shape.
-- [ ] After the first load, the game works with the network off.
-- [ ] A full game makes no requests outside the app's own origin, except opening Ko-fi on tap.
-- [ ] The Ko-fi prompt appears only after enough play time, never at launch, and not after a day away.
-- [ ] The About screen shows the OpenStreetMap and Overture attribution, built from the pack config.
-- [ ] No Burbank-specific names, coordinates or street lists appear in the game code; they all live in the Burbank pack.
-- [ ] Deployable to GitHub Pages from a public repo (workflow ready; first deploy is `HUMAN`).
+- [x] Plays start to finish in the browser; verified in Chromium (and WebKit if available) automatically, and on a Windows tablet and an Android tablet made in 2021 or later (`HUMAN`, instructions in `HANDOFF.md`). Automated checks pass; the two real-tablet runs are still `HUMAN` (procedure in `HANDOFF.md`).
+- [x] Home, Play, a choice of 10, 25 or 50 rounds, the rounds and the summary all work for every length.
+- [x] The map shows only the street outline, Costco and the six highlighted streets, with free pan and zoom.
+- [x] Rounds use real Burbank addresses and intersections, with no repeats in one game.
+- [x] Scoring matches the formula and the table, checked by unit tests.
+- [x] Stats show best score per length, averages for all time and the last 10 games, and per-tier history; the JSON export downloads a valid file in the proposed shape.
+- [x] After the first load, the game works with the network off.
+- [x] A full game makes no requests outside the app's own origin, except opening Ko-fi on tap.
+- [x] The Ko-fi prompt appears only after enough play time, never at launch, and not after a day away.
+- [x] The About screen shows the OpenStreetMap and Overture attribution, built from the pack config.
+- [x] No Burbank-specific names, coordinates or street lists appear in the game code; they all live in the Burbank pack.
+- [x] Deployable to GitHub Pages from a public repo (workflow ready; first deploy is `HUMAN`). Workflow tested locally with the sub-path build; the first deploy is `HUMAN`.
 
 ### HUMAN steps (collected into `HANDOFF.md`)
 

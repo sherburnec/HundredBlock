@@ -2,7 +2,7 @@
 
 Local only, no off-device backup (no git remote `origin`). First item in HANDOFF.md: add a remote.
 
-- Phases 0-5 complete (exit criteria passed; 125 flutter tests, 44 pytest, 28 e2e).
-- Current task: 6.1-6.6 (release and handoff). Done: README (6.1), LICENSE (6.2), pages workflow with tests (6.3, needs the local dry run), HANDOFF (6.5, needs final result counts).
-- Next: 6.3 dry run with BASE_HREF=/hundred-block/ and sub-path e2e; 6.4 clean clone check in a temp dir; update HANDOFF/DECISIONS with the final verification; 6.6 tag v0.1.0; tick Release checklist in Plan.md.
-- Gotchas: MSYS_NO_PATHCONV=1 for docker in Git Bash; large writes via the Write tool; long runs in background; after build_web.sh run `docker compose up -d --force-recreate serve`. NEVER run sed -i with an unchecked line-number variable (it wiped Plan.md once).
+- ALL PHASES (0-6) COMPLETE. Release tag v0.1.0 created locally.
+- Verification: clean clone passed every command in CLAUDE.md (125 flutter tests, 43 pytest + 1 skip, 28 e2e). See DECISIONS.md "FINAL VERIFICATION".
+- Remaining work is HUMAN only: see HANDOFF.md (add remote and push, enable Pages, Ko-fi URL, real tablet tests, confirm assumptions, check the address licence).
+- If resuming: nothing is half-finished. `docker compose up -d serve` serves build/web (currently the /hundred-block/ sub-path build) on port 8081.
