@@ -1,0 +1,20 @@
+{
+  "tiers": [
+    {
+      "highlightedStreets": [
+        "Burbank Blvd",
+        "Glenoaks Blvd",
+        "Hollywood Way",
+        "Magnolia Blvd",
+        "Olive Ave",
+        "Verdugo Ave"
+      ],
+      "id": "tier1",
+      "landmarks": [
+        "costco"
+      ],
+      "name": "Street outline"
+    }
+  ],
+  "v": 1
+}

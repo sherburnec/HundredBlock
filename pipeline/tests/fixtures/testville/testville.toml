@@ -1,0 +1,30 @@
+id = "testville"
+name = "Testville"
+attribution = ["fixture attribution"]
+
+[boundary]
+source = "file"
+path = "boundary.geojson"
+
+[gate]
+min_addresses = 3
+
+[streets]
+classes = ["primary", "secondary", "tertiary", "residential", "unclassified"]
+intersection_classes = ["primary", "tertiary", "residential"]
+prompt_exclude_regex = ["Ramp"]
+
+[[tiers]]
+id = "t1"
+name = "Fixture tier"
+landmarks = ["mart"]
+
+[[tiers.highlights]]
+label = "Main"
+regex = "^Main St$"
+
+[[landmarks]]
+id = "mart"
+name = "Test Mart"
+search = "Test Mart"
+name_regex = "^Test Mart$"

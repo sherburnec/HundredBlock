@@ -1,0 +1,2 @@
+{"id": "p1", "name": "Test Mart", "brand": "Test Mart", "confidence": 0.9, "address": "200 Pine Rd", "lon": -99.99505, "lat": 40.0061}
+{"id": "p2", "name": "Test Mart Gas", "brand": null, "confidence": 0.5, "address": "", "lon": -99.9949, "lat": 40.0062}

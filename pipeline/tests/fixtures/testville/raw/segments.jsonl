@@ -1,0 +1,19 @@
+{"id": "s001", "name": "West Main Street", "class": "residential", "subclass": null, "coords": [[-100.009, 40.01], [-100.0, 40.01]]}
+{"id": "s002", "name": "Main Street", "class": "residential", "subclass": null, "coords": [[-100.0, 40.01], [-99.998, 40.01]]}
+{"id": "s003", "name": "Main Street", "class": "residential", "subclass": null, "coords": [[-99.998, 40.01], [-99.9978, 40.01]]}
+{"id": "s004", "name": "Main Street", "class": "residential", "subclass": null, "coords": [[-99.9978, 40.01], [-99.995, 40.01]]}
+{"id": "s005", "name": "Main Street", "class": "residential", "subclass": null, "coords": [[-99.995, 40.01], [-99.991, 40.01]]}
+{"id": "s006", "name": "Oak Avenue", "class": "residential", "subclass": null, "coords": [[-100.0, 40.002], [-100.0, 40.01]]}
+{"id": "s007", "name": "Oak Avenue", "class": "residential", "subclass": null, "coords": [[-100.0, 40.01], [-100.0, 40.018]]}
+{"id": "s008", "name": "Pine Road", "class": "tertiary", "subclass": null, "coords": [[-99.995, 40.002], [-99.995, 40.01]]}
+{"id": "s009", "name": "Pine Road", "class": "tertiary", "subclass": null, "coords": [[-99.995, 40.01], [-99.995, 40.018]]}
+{"id": "s010", "name": "Divided Boulevard", "class": "primary", "subclass": null, "coords": [[-99.998, 40.003], [-99.998, 40.01]]}
+{"id": "s011", "name": "Divided Boulevard", "class": "primary", "subclass": null, "coords": [[-99.998, 40.01], [-99.998, 40.017]]}
+{"id": "s012", "name": "Divided Boulevard", "class": "primary", "subclass": null, "coords": [[-99.9978, 40.003], [-99.9978, 40.01]]}
+{"id": "s013", "name": "Divided Boulevard", "class": "primary", "subclass": null, "coords": [[-99.9978, 40.01], [-99.9978, 40.017]]}
+{"id": "s014", "name": "Loop Lane", "class": "residential", "subclass": null, "coords": [[-99.997, 40.01], [-99.997, 40.015], [-99.992, 40.015], [-99.992, 40.01]]}
+{"id": "s015", "name": "Main Street", "class": "residential", "subclass": null, "coords": [[-99.997, 40.01], [-99.9969, 40.01]]}
+{"id": "s016", "name": "Main Street", "class": "residential", "subclass": null, "coords": [[-99.992, 40.01], [-99.9919, 40.01]]}
+{"id": "s017", "name": "Alley n/o Main Street", "class": "service", "subclass": null, "coords": [[-100.005, 40.0105], [-100.003, 40.0105]]}
+{"id": "s018", "name": "Trail Path", "class": "footway", "subclass": null, "coords": [[-100.005, 40.005], [-100.003, 40.005]]}
+{"id": "s019", "name": "Main Street Ramp", "class": "primary", "subclass": null, "coords": [[-99.991, 40.01], [-99.99, 40.012]]}

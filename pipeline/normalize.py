@@ -18,6 +18,11 @@ def _is_dir(tok: str) -> bool:
     return tok.lower() in DIRECTIONS or tok.upper() in DIR_ABBR
 
 
+def _is_suffix_word(tok: str) -> bool:
+    t = tok.lower()
+    return t in SUFFIXES or t == "way" or tok.capitalize() in SUFFIX_ABBR
+
+
 def _dir(tok: str) -> str:
     return DIRECTIONS.get(tok.lower(), tok.upper())
 
@@ -43,8 +48,9 @@ def normalize_street(street: str) -> str:
     if len(out) > 2 and _is_dir(out[-1]):
         out[-1] = _dir(out[-1])
         last_content = len(out) - 2
-    if len(out) > 1 and _is_dir(out[0]):
-        out[0] = _dir(out[0])
+    if len(out) > 2 or (len(out) == 2 and not _is_suffix_word(out[1])):
+        if _is_dir(out[0]):
+            out[0] = _dir(out[0])
     if last_content > 0:
         t = out[last_content]
         if t.lower() in SUFFIXES:

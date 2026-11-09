@@ -1,0 +1,18 @@
+{
+  "bbox": [
+    -118.37021,
+    34.14266,
+    -118.27999,
+    34.22166
+  ],
+  "counts": {
+    "addressStreets": 372,
+    "addresses": 24973,
+    "addressesRaw": 27911,
+    "intersections": 1218,
+    "landmarks": 1,
+    "streetFeatures": 395
+  },
+  "release": "2026-10-21.0",
+  "v": 1
+}

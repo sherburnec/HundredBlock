@@ -1,6 +1,11 @@
 # City definition for Burbank, CA. All city-specific pipeline input lives here.
 id = "burbank"
 name = "Burbank, CA"
+attribution = [
+  "© OpenStreetMap contributors, available under the Open Database License (ODbL 1.0)",
+  "Map data from Overture Maps Foundation",
+  "Address data: Los Angeles County (CC0), distributed by OpenAddresses through Overture Maps Foundation",
+]
 
 [boundary]
 source = "overture_division"      # Overture divisions / division_area
@@ -17,6 +22,10 @@ pan_padding = 0.10                # pan limits = boundary bbox padded by 10%
 classes = ["motorway", "trunk", "primary", "secondary", "tertiary", "residential", "living_street", "unclassified"]
 # Classes that may form intersection prompts (no motorway, ramps, service)
 intersection_classes = ["primary", "secondary", "tertiary", "residential", "unclassified", "living_street"]
+# Raw names dropped from the outline (not real streets, e.g. the city boundary line Overture stores as a road)
+outline_exclude_regex = ["-Bdy$"]
+# Canonical names never used in intersection prompts (ramps, frontage roads, parking lots, boundary line)
+prompt_exclude_regex = ["Ramp", "Frontage", " Lot$", "Bdy$"]
 
 [[tiers]]
 id = "tier1"
@@ -49,7 +58,3 @@ search = "Costco"                 # matched against place name and brand
 # Only the main warehouse: exclude pharmacy, gas, ATM, etc.
 name_regex = "^Costco( Wholesale)?$"
 
-attribution = [
-  "© OpenStreetMap contributors",
-  "Map data from Overture Maps Foundation",
-]

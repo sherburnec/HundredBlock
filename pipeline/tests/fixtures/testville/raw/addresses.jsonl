@@ -1,0 +1,10 @@
+{"id": "a01", "number": "100", "street": "North Oak Avenue", "unit": null, "postcode": "1", "lon": -99.9999, "lat": 40.005}
+{"id": "a02", "number": "100", "street": "North Oak Avenue", "unit": "2", "postcode": "1", "lon": -99.99991, "lat": 40.00501}
+{"id": "a03", "number": "200", "street": "Pine Road", "unit": null, "postcode": "1", "lon": -99.9951, "lat": 40.006}
+{"id": "a04", "number": "5", "street": "East Main Street", "unit": null, "postcode": "1", "lon": -99.996, "lat": 40.0101}
+{"id": "a05", "number": "7", "street": "Main Street", "unit": null, "postcode": "1", "lon": -99.994, "lat": 40.0102}
+{"id": "a06", "number": "", "street": "Main Street", "unit": null, "postcode": "1", "lon": -99.994, "lat": 40.0103}
+{"id": "a07", "number": "9", "street": "Far Away Road", "unit": null, "postcode": "1", "lon": -90.0, "lat": 40.0}
+{"id": "a08", "number": "300", "street": "Pine Road", "unit": null, "postcode": "1", "lon": -99.9952, "lat": 40.007}
+{"id": "a09", "number": "400", "street": "Pine Road", "unit": null, "postcode": "1", "lon": -99.9953, "lat": 40.008}
+{"id": "a10", "number": "500", "street": "Pine Road", "unit": null, "postcode": "1", "lon": 0.0, "lat": 0.0}

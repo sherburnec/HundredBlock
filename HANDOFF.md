@@ -16,3 +16,6 @@ None yet.
 
 ## Real-tablet map performance (HUMAN)
 Headless software-GL numbers are only indicative. On the tablet: open the Pages URL, play a round, pan and pinch-zoom continuously for 30 s and note whether it feels smooth (target: no visible stutter). Report device model, browser and version.
+
+## Licence check (HUMAN, before public launch)
+Address records for Burbank carry the Overture licence string `LicenseRef-Proprietary`, while Overture's attribution page says Los Angeles County addresses are CC0. See `DATA_LICENSES.md` ("Open question"). Confirm, or replace the address source.
