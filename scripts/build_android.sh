@@ -10,5 +10,6 @@ fi
 flutter pub get
 flutter build apk --release
 APK=build/app/outputs/flutter-apk/app-release.apk
+sh scripts/check_apk.sh "$APK"
 echo "APK: $APK"
 ls -l "$APK" | awk '{print "size bytes:", $5}'
