@@ -38,7 +38,7 @@ docker compose run --rm flutter dart format --set-exit-if-changed .
 docker compose run --rm flutter flutter analyze
 docker compose run --rm flutter flutter test
 docker compose run --rm flutter sh scripts/build_web.sh     # release build; BASE_HREF env, default "/"
-docker compose run --rm android sh scripts/build_android.sh  # release APK to build/app/outputs/flutter-apk/ (once the android service exists)
+docker compose run --rm android sh scripts/build_android.sh  # release APK to build/app/outputs/flutter-apk/
 docker compose up web-dev                              # dev server at http://localhost:8080
 docker compose run --rm data python -m pipeline.run --city burbank         # rebuild data (needs network)
 docker compose run --rm data pytest                         # data pipeline tests

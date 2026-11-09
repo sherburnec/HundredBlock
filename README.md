@@ -1,9 +1,10 @@
 # Hundred Block
 
-A free, offline-capable game for the web. You are shown a real Burbank, CA address or intersection and have 30 seconds
-to tap where it is on a street-outline map (no basemap, no labels). Rounds are scored on distance and speed. A game is
-10, 25, 50 or 100 rounds. Stats stay in your browser and can be exported as JSON. It is a Flutter web app hosted as a static
-site on GitHub Pages.
+A free, offline-capable game for the web and for Android. You are shown a real Burbank, CA address or intersection and
+have 30 seconds to tap where it is on a street-outline map (no basemap, no labels). Rounds are scored on distance and
+speed. A game is 10, 25, 50 or 100 rounds. Stats stay on your device (browser storage, or app storage on Android) and can
+be exported as JSON. It is one Flutter codebase: a web app hosted as a static site on GitHub Pages, and an Android APK for
+phones and tablets made in 2020 or later.
 
 Every city is a self-contained data pack under `assets/cities/<city>/`. Burbank is the only pack in this build, and the
 game code knows nothing about Burbank (a test enforces it).
@@ -23,6 +24,7 @@ docker compose run --rm flutter flutter analyze
 docker compose run --rm flutter flutter test                # unit and widget tests
 docker compose run --rm flutter sh scripts/build_web.sh     # release build into build/web; BASE_HREF env, default "/"
 docker compose up web-dev                                   # dev server at http://localhost:8080
+docker compose run --rm android sh scripts/build_android.sh   # release APK + permission check -> build/app/outputs/flutter-apk/app-release.apk
 docker compose up -d serve                                  # serves build/web at http://localhost:8081 (like GitHub Pages)
 docker compose run --rm data python -m pipeline.run --city burbank   # rebuild the data pack (needs network)
 docker compose run --rm data pytest                         # data pipeline tests
@@ -48,6 +50,31 @@ commands that pass container paths.
   full 10/25/50/100 round games on the real map, zero requests outside the app's origin, offline reload and a full offline
   game, stats persistence and export, update behaviour, viewport matrix (Chromium and WebKit), touch gestures,
   robustness (corrupt or full storage, double taps, hidden tab) and accessibility.
+
+## Android app
+
+The same Flutter code builds an Android APK for phones and tablets made in 2020 or later (Android 10, API 29, or newer).
+Only `lib/platform/` (storage, timer pause, export, links) and `android/` differ from the web build, so a feature change
+reaches both.
+
+```
+docker compose run --rm android sh scripts/build_android.sh     # about 1 min warm, 10+ min the first time
+```
+
+The APK lands in `build/app/outputs/flutter-apk/app-release.apk` (about 79 MB: one universal file with the map engine for
+three CPU types). The build script then runs `scripts/check_apk.sh`, which fails if the APK asks for the network, the
+location or any permission outside a short allow-list, if minSdk is not 29, or if the city pack is missing.
+
+- **Install:** copy the APK to the phone or tablet and open it (allow "install unknown apps" once), or
+  `adb install` it from any machine that has adb.
+- **Signing:** without a key the APK is signed with the debug key and the build warns. For a build you hand out, make the
+  release key once (see `HANDOFF.md`, section 8) and rebuild. Keep the key safe: without it the app can never be updated
+  in place.
+- **Offline and privacy:** the release APK has no INTERNET permission. Stats are stored on the device; Export opens the
+  Android share sheet with the same JSON file as on the web; Ko-fi opens in the system browser when tapped.
+- **Updates:** the website updates the moment it is deployed. The app does not: give people a new APK (bump the build
+  number in `pubspec.yaml`, for example `1.0.0+2`, so Android accepts it as an update).
+- **CI:** `.github/workflows/ci.yml` builds a debug-signed APK after the tests pass and attaches it to the run.
 
 ## Offline and updates
 
@@ -83,9 +110,9 @@ Scoring numbers are placeholders: see `TUNING.md`.
 
 ## Known limitations
 
-- Burbank only, one difficulty. No other cities, endless mode, stats import, leaderboard or store builds yet.
-- Needs a browser with WebGL2 (Safari 15 or newer, current Chrome, Edge, Firefox).
+- Burbank only, one difficulty. No other cities, endless mode, stats import, leaderboard, Play Store listing or iOS build yet. Stats are not shared between the website and the app (export from one, there is no import yet).
+- The website needs a browser with WebGL2 (Safari 15 or newer, current Chrome, Edge, Firefox). The Android app needs Android 10 or newer.
 - Stats live in browser storage, which a browser can clear. The Export button is the backup.
-- Real-tablet performance and offline behaviour are checked by a person (see `HANDOFF.md`); the automated numbers come
+- Real-device performance and offline behaviour (web tablets and the Android app) are checked by a person (see `HANDOFF.md`); the automated numbers come
   from headless software rendering.
 - The first load downloads about 15 MB (mostly the map engine and CanvasKit) and caches it.

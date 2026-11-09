@@ -15,6 +15,7 @@ decision). None of it blocks the code.
 4. **Test on real tablets** with the procedure in section 3.
 5. **Confirm or change the assumptions** in section 4 (licence, app name, scoring constants).
 6. **Check the address licence** (section 5).
+7. **Android app:** confirm the application id, make the release key, and run the device test in section 8.
 
 ## 2. Results of the exit criteria
 
@@ -107,3 +108,64 @@ A 100-round game can take up to about 50 minutes, and quitting (or closing the t
 ## 7. BLOCKED items
 
 None.
+
+## 8. Android app (HUMAN steps)
+
+The APK builds and passes its automated checks (`docker compose run --rm android sh scripts/build_android.sh`: release
+build, then `scripts/check_apk.sh`). Docker on Windows cannot run an emulator, so nothing has been run on a real device yet.
+
+**Before you hand out any APK**
+
+1. **Confirm the application id.** It is `app.hundredblock` (`android/app/build.gradle.kts`, `applicationId` and
+   `namespace`, and the folder `android/app/src/main/kotlin/app/hundredblock/`). Android treats a different id as a
+   different app, so changing it later breaks updates. Decide now.
+2. **Make the release key (once).**
+   `HB_STORE_PASSWORD='a-long-password' docker compose run --rm -e HB_STORE_PASSWORD android sh scripts/make_keystore.sh`
+   creates `android/keystore/hundredblock.jks` and `android/key.properties` (both git-ignored). **Back up the keystore and
+   the password somewhere safe.** If you lose them, nobody can update the installed app. Then rebuild; the build script
+   says "Signing: release key". Never commit either file.
+3. **Version.** Edit `version:` in `pubspec.yaml` (for example `1.0.1+2`). The part after `+` is the Android version code
+   and must go up for every APK you give people, or Android will refuse it as an update.
+
+**Install:** copy `build/app/outputs/flutter-apk/app-release.apk` to the device and open it (allow installs from that
+app once), or `adb install -r app-release.apk`. Debug-signed and release-signed builds cannot update each other:
+uninstall first when switching.
+
+**Updating together with the website:** both come from the same commit. The website updates when `pages.yml` deploys.
+The app only changes when you build and hand out a new APK. CI builds a debug-signed APK on every push as a check
+(artifact `hundred-block-debug-signed-apk`).
+
+### Android device test plan (HUMAN)
+
+Do this on **one Android phone and one Android tablet**, both made in 2020 or later.
+
+1. Install the APK. Note device, Android version and the build number. The app icon should show a dark tile with a
+   street grid and a red dot (drawn as vector art; not yet seen on a device).
+2. Open the app and play **10 rounds**. Check: prompt readable, countdown works, one-finger drag pans, two-finger pinch
+   zooms, a tap places the marker, **the blue landmark dot and its label sit on top of each other at every zoom**
+   (this is the pixel-density fix; it is the main thing only a device can confirm).
+3. **The map must draw.** The release APK has no INTERNET permission on purpose. If the map is blank or the app closes at
+   the map, report it; do not just add the permission back (it would break the no-outbound-requests rule).
+4. Switch to another app for 10 seconds mid-round and come back: the round timer must not have counted the time away.
+5. Press the **Back** button or gesture mid-round: it asks "Quit this game?"; Keep playing continues, Quit goes Home.
+6. Finish the game: "Saved to stats." appears. Force-close the app, reopen it, open **Stats**: the game is still there.
+7. In Stats tap **Export stats (JSON)**: the Android share sheet opens with `hundred-block-stats-YYYY-MM-DD.json`; save or
+   send it somewhere and open it as JSON.
+8. Turn on **airplane mode**, close and reopen the app, play another 10 rounds. (The app has no network use, so this
+   should be identical.)
+9. Rotate the device in the middle of a game, and on the phone try both orientations: the layout must stay usable,
+   nothing hidden behind the system bars or a camera cutout.
+10. About: both attributions show. Ko-fi (when the prompt appears or from the link): opens in the system browser.
+
+**Report back:** device models, Android versions, pass or fail per step, screenshots of any problem, and how smooth the
+map felt (1 to 5).
+
+### Known Android limits
+
+- The APK is about 79 MB because it carries the map engine for three CPU types. A per-CPU split
+  (`flutter build apk --split-per-abi`) would give roughly a third of that per file; not done.
+- Stats are separate from the website's stats (no import yet). Export from one, nothing reads it back.
+- On Android a stats write is saved in the background, so a rare disk failure is only logged (the web build shows
+  "could not be saved").
+- ACCESS_NETWORK_STATE is the one permission kept (the map engine reads it); it cannot send data.
+- No Play Store listing and no iOS build (iOS needs macOS and Xcode).

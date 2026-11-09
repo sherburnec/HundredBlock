@@ -6,7 +6,9 @@ The first build is a free, offline-capable Flutter web game where a player taps 
 
 ## Scope
 
-The first build is one difficulty, one city and one platform: the browser on tablets made in 2021 or later. Phones should work but are not a design or test target.
+The first build is one difficulty, one city and one platform: the browser on tablets made in 2021 or later. Phones should work in the browser but are not a design or test target there.
+
+**Android app (added after v0.1.0):** the same Flutter code also builds an APK for Android phones and tablets made in 2020 or later (Android 10 or newer). Phones are a first-class target for the app (portrait and landscape from 360x640 dp). The app has no INTERNET permission, keeps stats in app storage, exports through the share sheet and opens Ko-fi in the system browser on tap. It is sideloaded as an APK; there is no store listing.
 
 | In the first build | Waits for later |
 | --- | --- |
@@ -16,7 +18,7 @@ The first build is one difficulty, one city and one platform: the browser on tab
 | Distance and speed scoring | Address-number scoring |
 | Stats: best score, averages, per-tier history, JSON export | Stats import |
 | Fully offline after first load, no outbound reporting | Leaderboard (opt-in, needs a server) |
-| Small Ko-fi prompt based on play time | Android and iOS store builds, agency features |
+| Small Ko-fi prompt based on play time | Play Store and iOS builds, agency features |
 
 Flutter is the chosen stack, hosted as a static site on GitHub Pages.
 
@@ -138,7 +140,7 @@ Best scores and averages are calculated from this list when the Stats screen ope
 - **Map:** the [maplibre\_gl](https://github.com/maplibre/flutter-maplibre-gl) package, which supports web, Android and iOS. Streets, highlighted streets, markers and Costco are GeoJSON layers with no tile source, so the first build needs no tile files. This also avoids the package's offline regions, which do not work on web.
 - **Storage:** game history and the Ko-fi counter in browser local storage through a small Flutter package.
 - **Timer:** a clock that stops when the tab is hidden, shared by the round timer and the Ko-fi counter.
-- **Later wrappers:** the same Flutter code can build native Android and iOS apps when you get there.
+- **Android app:** built from the same code (`android/`, `lib/platform/platform_native.dart`) by the `android` Docker service. MapLibre Native draws the map; storage is shared_preferences, export uses the share sheet, the timer pauses when the app leaves the foreground. iOS is not built (it needs macOS and Xcode).
 
 Prove these first in a short spike, before building features:
 
@@ -161,6 +163,7 @@ Work runs in this order, with the data count as a gate:
 The first build is done when all of these hold:
 
 - [ ] It plays start to finish in the browser on a Windows tablet and an Android tablet, both made in 2021 or later.
+- [ ] The Android APK installs and plays start to finish on an Android phone and an Android tablet, both made in 2020 or later, with no INTERNET permission.
 - [ ] Home, Play, a choice of 10, 25, 50 or 100 rounds, the rounds and the summary all work for every length.
 - [ ] The map shows only the street outline, Costco and the six highlighted streets, with free pan and zoom.
 - [ ] Rounds use real Burbank addresses and intersections, with no repeats in one game.
