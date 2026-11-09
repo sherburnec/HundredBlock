@@ -173,7 +173,7 @@ Goal: prove the five PRD checks and a deploy path with a throwaway-quality app, 
 2. A custom `CustomPainter` map: Web Mercator projection of the street lines with `InteractiveViewer`-style pan and pinch zoom, drawing only visible, simplified geometry.
 Only stop and ask the user if all three options fail.
 
-**Exit criteria:**
+**Exit criteria:** PASSED 2026-11-08 (root and sub-path builds; Chromium; WebKit for non-offline)
 - [x] No-third-party test passes against the release build, including under the sub-path.
 - [x] Offline test passes (reload with network off works).
 - [x] WebGL2 test passes; map spike pans and zooms with the synthetic grid; frame-time numbers recorded.
@@ -206,7 +206,7 @@ Prepare data once at build time with a script. The script takes a city boundary 
 - [ ] 2.12 **Licence record.** Write `DATA_LICENSES.md`: which Overture themes and release, each theme's licence as stated by Overture at that release (transportation derives from OpenStreetMap and carries ODbL attribution requirements), and the exact attribution text the About screen needs, which the pipeline writes into the pack's `city.json` `attribution` list. Check the licences at pull time instead of assuming.
 - [ ] 2.13 **Pipeline tests (`docker compose run --rm data pytest`):** street/suffix normalization cases, unit-duplicate removal, intersection ambiguity rule (a pair meeting twice is dropped), dual-carriageway clustering, output schema validation, determinism (two runs produce identical files), and a fixture run with a tiny non-Burbank boundary (checked in under `pipeline/tests/fixtures`, no network) that produces a schema-valid pack, proving nothing is hardcoded to Burbank.
 
-**Exit criteria:** PASSED 2026-11-08 (root and sub-path builds; Chromium; WebKit for non-offline)
+**Exit criteria:**
 - [ ] Gate passed and counts recorded.
 - [ ] All `assets/cities/burbank/*` files exist, validate against their schemas, and are deterministic across two runs.
 - [ ] `highlights.md` shows all six streets matched with non-zero segments.
