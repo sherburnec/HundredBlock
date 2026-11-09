@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
-import { waitForMap } from './helpers';
+import { openHome, startGame, tapMap, button } from './helpers';
 
-test('map pan/zoom frame times (indicative, software GL)', async ({ page }, info) => {
-  await page.goto('');
-  await waitForMap(page);
+test('map pan/zoom frame times with the real city (indicative, software GL)', async ({ page }, info) => {
+  await openHome(page);
+  await startGame(page, 10);
+  await tapMap(page);
+  await expect(button(page, 'Lock in')).toBeEnabled({ timeout: 60_000 });
   await page.evaluate(() => {
     const w = window as any;
     w.__frames = [];

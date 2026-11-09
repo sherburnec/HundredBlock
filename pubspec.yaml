@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   maplibre_gl: 0.27.1
+  web: 1.1.1
   flutter:
     sdk: flutter
 
@@ -65,7 +66,7 @@ flutter:
         - asset: assets/fonts/Roboto_700Bold.ttf
           weight: 700
   assets:
-    - assets/spike/
+    - assets/cities/burbank/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
