@@ -8,6 +8,7 @@ const sizes: [string, number, number][] = [
   ['1440x960', 1440, 960],
   ['768x1024-portrait', 768, 1024],
   ['390x844-phone', 390, 844],
+  ['360x640-small-android-phone', 360, 640],
 ];
 
 fs.mkdirSync('/work/e2e/screenshots', { recursive: true });

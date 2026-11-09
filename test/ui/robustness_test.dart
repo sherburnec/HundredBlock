@@ -9,7 +9,18 @@ import 'package:hundred_block/ui/round/game_screen.dart';
 
 import '../support/fake_map.dart';
 
-const _sizes = [Size(1024, 768), Size(768, 1024), Size(390, 844)];
+/// Tablets (primary web target) plus Android phones from 2020 on, portrait and landscape.
+const _sizes = [
+  Size(1024, 768),
+  Size(768, 1024),
+  Size(390, 844),
+  Size(360, 640),
+  Size(640, 360),
+  Size(412, 915),
+  Size(915, 412),
+  Size(800, 1280),
+  Size(1280, 800),
+];
 
 Widget _host(TestApp app, Widget home, double textScale) => AppScope(
   services: app.services,
@@ -100,6 +111,8 @@ void main() {
     );
   }
 
+  _phoneAndTabletTouchTargets();
+
   testWidgets('reduced motion is passed to the map', (tester) async {
     tester.view.physicalSize = const Size(1024, 768);
     tester.view.devicePixelRatio = 1;
@@ -122,4 +135,62 @@ void main() {
     await tester.pump();
     expect(app.log.lastRequest!.reduceMotion, isTrue);
   });
+}
+
+/// Every button and icon button currently built must be at least 48 dp on its short side.
+void _expectTouchTargets(WidgetTester tester, String where) {
+  final targets = [
+    ...tester.widgetList(find.byWidgetPredicate((w) => w is ButtonStyleButton)),
+    ...tester.widgetList(find.byType(IconButton)),
+  ];
+  expect(targets, isNotEmpty, reason: where);
+  for (final w in targets) {
+    final size = tester.getSize(find.byWidget(w as Widget));
+    expect(
+      size.shortestSide,
+      greaterThanOrEqualTo(48),
+      reason: '$where: ${w.runtimeType} is $size',
+    );
+  }
+}
+
+void _phoneAndTabletTouchTargets() {
+  for (final size in _sizes) {
+    testWidgets(
+      'tap targets are at least 48 dp on every screen at ${size.width.toInt()}x${size.height.toInt()}',
+      (tester) async {
+        tester.view.physicalSize = size;
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+        final app = await makeTestApp();
+
+        await tester.pumpWidget(_host(app, const HomeScreen(), 1.0));
+        _expectTouchTargets(tester, 'Home');
+        for (final label in ['Play', 'Stats', 'About']) {
+          await tester.ensureVisible(
+            find.text(label),
+          ); // Home scrolls on short screens
+          await tester.tap(find.text(label));
+          await tester.pumpAndSettle();
+          _expectTouchTargets(tester, label);
+          await tester.tap(find.byTooltip('Back'));
+          await tester.pumpAndSettle();
+        }
+
+        final game = _game(app, ['1 A St']);
+        await tester.pumpWidget(_host(app, GameScreen(game: game), 1.0));
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('fake-map')));
+        await tester.pump();
+        _expectTouchTargets(tester, 'Round');
+        await tester.tap(find.text('Lock in'));
+        await tester.pump();
+        _expectTouchTargets(tester, 'Round result');
+        await tester.tap(find.text('Finish'));
+        await tester.pump();
+        expect(find.text('Game complete'), findsOneWidget);
+        _expectTouchTargets(tester, 'Summary');
+      },
+    );
+  }
 }
