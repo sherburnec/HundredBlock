@@ -138,6 +138,55 @@ void main() {
     expect(find.text('Play'), findsOneWidget); // back on Home
   });
 
+  testWidgets(
+    'Android back asks the same quit question and never silently leaves',
+    (tester) async {
+      final app = await makeTestApp();
+      await _openGame(tester, app, 10);
+      // System back while a round is in progress.
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.text('Quit this game?'), findsOneWidget);
+      app.clock.advance(const Duration(seconds: 40)); // timer is paused
+      await tester.tap(find.text('Keep playing'));
+      await tester.pumpAndSettle();
+      expect(find.text('Round 1 of 10'), findsOneWidget);
+      expect(find.textContaining("Time's up"), findsNothing);
+      // Also on the round result screen.
+      await tester.tap(find.byKey(const Key('fake-map')));
+      await tester.pump();
+      await tester.tap(find.text('Lock in'));
+      await tester.pump();
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.text('Quit this game?'), findsOneWidget);
+      // Confirming leaves for Home.
+      await tester.tap(find.text('Quit'));
+      await tester.pumpAndSettle();
+      expect(find.text('Play'), findsOneWidget);
+    },
+  );
+
+  testWidgets('Android back from the summary returns Home without a prompt', (
+    tester,
+  ) async {
+    final app = await makeTestApp();
+    await _openGame(tester, app, 10);
+    for (var i = 1; i <= 10; i++) {
+      await tester.tap(find.byKey(const Key('fake-map')));
+      await tester.pump();
+      await tester.tap(find.text('Lock in'));
+      await tester.pump();
+      await tester.tap(find.text(i == 10 ? 'Finish' : 'Next round'));
+      await tester.pump();
+    }
+    expect(find.text('Game complete'), findsOneWidget);
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.text('Quit this game?'), findsNothing);
+    expect(find.text('Play'), findsOneWidget);
+  });
+
   testWidgets('Play again returns to the length chooser', (tester) async {
     final app = await makeTestApp();
     await _openGame(tester, app, 10);
