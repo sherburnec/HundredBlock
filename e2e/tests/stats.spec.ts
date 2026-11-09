@@ -17,7 +17,7 @@ test('stats persist across reload, export is valid, About shows attribution, no 
     // The Ko-fi prompt never shows after a short session.
     await expect(page.getByText('Support on Ko-fi')).toHaveCount(0);
   }
-  await expect(page.getByText('Saved to stats.')).toBeVisible();
+  await expect(page.getByText('Saved to stats.').first()).toBeVisible(); // live regions also announce
   await button(page, 'Home').click();
 
   // Stats survive a reload.
