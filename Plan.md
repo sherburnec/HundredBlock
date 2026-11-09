@@ -29,9 +29,9 @@ The game is named Hundred Block, so add **100 rounds** as a fourth game length b
 
 ## Tasks
 
-- [ ] 1. **Lengths.** Add 100 to `kGameLengths` in `lib/ui/length/length_screen.dart` and to `kStatLengths` in `lib/stats/stats_calculator.dart`. Check for any other place that hard-codes the lengths (`grep` `lib/` for `25` and `50` near rounds, Stats screen, semantics labels) and make them use these lists. Prefer one shared constant if the two lists would otherwise drift; log the choice if you merge them.
-- [ ] 2. **Update existing tests** that assume three lengths: `test/stats/stats_test.dart` (bests map now has a `100` key), `test/ui/game_flow_test.dart` and `test/game/prompt_selector_test.dart` (loop over `[10, 25, 50, 100]`), `test/ui/phase4_widgets_test.dart` (the `none yet` expectations: recount for four lengths).
-- [ ] 3. **New tests.**
+- [x] 1. **Lengths.** Add 100 to `kGameLengths` in `lib/ui/length/length_screen.dart` and to `kStatLengths` in `lib/stats/stats_calculator.dart`. Check for any other place that hard-codes the lengths (`grep` `lib/` for `25` and `50` near rounds, Stats screen, semantics labels) and make them use these lists. Prefer one shared constant if the two lists would otherwise drift; log the choice if you merge them.
+- [x] 2. **Update existing tests** that assume three lengths: `test/stats/stats_test.dart` (bests map now has a `100` key), `test/ui/game_flow_test.dart` and `test/game/prompt_selector_test.dart` (loop over `[10, 25, 50, 100]`), `test/ui/phase4_widgets_test.dart` (the `none yet` expectations: recount for four lengths).
+- [x] 3. **New tests.**
   - Prompt selector: a 100-round list has 100 prompts, 50 addresses and 50 intersections, no repeats, no duplicate coordinates, deterministic with a seed, against a pool shaped like the real one.
   - Stats: a saved 100-round game shows as the best for length 100 only, counts toward both averages by points per round, and appears in history. A stored game list with no 100-round games still computes (no null-key crash).
   - Widget: Length screen shows four buttons; tapping "100 rounds" starts a 100-round game; the Stats screen shows four best-score rows.

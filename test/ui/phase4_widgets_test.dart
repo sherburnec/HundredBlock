@@ -96,7 +96,7 @@ void main() {
       expect(find.text('Best score'), findsOneWidget);
       expect(find.text('6,120'), findsOneWidget);
       expect(find.text('9,000'), findsOneWidget);
-      expect(find.text('none yet'), findsOneWidget); // 50 rounds
+      expect(find.text('none yet'), findsNWidgets(2)); // 50 and 100 rounds
       expect(find.text('Average points per round'), findsOneWidget);
       // (4000 + 6120 + 9000) / 45 = 424.9
       expect(

@@ -25,7 +25,7 @@ void main() {
     random: Random(seed),
   );
 
-  for (final n in [10, 25, 50]) {
+  for (final n in [10, 25, 50, 100]) {
     test('N=$n: right count, no repeats, about half and half', () {
       final list = pick(n, 7);
       expect(list.length, n);
@@ -35,6 +35,24 @@ void main() {
       expect((a - (n - a)).abs(), lessThanOrEqualTo(1));
     });
   }
+
+  test('100 rounds against a pool shaped like the real one', () {
+    final bigAddresses = _pool(PromptKind.address, 24973, prefix: 'a');
+    final fewIntersections = _pool(PromptKind.intersection, 1218, prefix: 'i');
+    List<Prompt> pick100(int seed) => selectPrompts(
+      addresses: bigAddresses,
+      intersections: fewIntersections,
+      count: 100,
+      random: Random(seed),
+    );
+    final list = pick100(5);
+    expect(list.length, 100);
+    expect(list.where((p) => p.kind == PromptKind.address).length, 50);
+    expect(list.where((p) => p.kind == PromptKind.intersection).length, 50);
+    expect(list.map((p) => p.text).toSet().length, 100);
+    expect(list.map((p) => LatLon(p.lat, p.lon)).toSet().length, 100);
+    expect(pick100(5).map((p) => p.text), list.map((p) => p.text));
+  });
 
   test('odd counts give the extra prompt to either type across seeds', () {
     final extra = <PromptKind>{};

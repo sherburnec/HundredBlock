@@ -27,7 +27,7 @@ void main() {
     loadRealPack,
   ); // real file IO must happen outside the fake-async test zone
 
-  for (final rounds in [10, 25, 50]) {
+  for (final rounds in [10, 25, 50, 100]) {
     testWidgets('full $rounds round game: home to summary', (tester) async {
       final app = await makeTestApp();
       await _openGame(tester, app, rounds);

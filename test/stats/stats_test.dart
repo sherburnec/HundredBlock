@@ -150,7 +150,7 @@ void main() {
   group('computeStats', () {
     test('no games', () {
       final s = computeStats([]);
-      expect(s.bestByLength, {10: null, 25: null, 50: null});
+      expect(s.bestByLength, {10: null, 25: null, 50: null, 100: null});
       expect(s.averageAllTime, isNull);
       expect(s.averageLast10, isNull);
       expect(s.historyByTier, isEmpty);
@@ -166,6 +166,37 @@ void main() {
       expect(s.bestByLength[10], 6120);
       expect(s.bestByLength[25], 9000);
       expect(s.bestByLength[50], isNull);
+    });
+
+    test('a 100-round game is the best for length 100 only', () {
+      final s = computeStats([
+        game('g_0001', rounds: 10, total: 4000),
+        game('g_0002', rounds: 100, total: 50000),
+      ]);
+      expect(s.bestByLength[100], 50000);
+      expect(s.bestByLength[10], 4000);
+      expect(s.bestByLength[25], isNull);
+      expect(s.bestByLength[50], isNull);
+    });
+
+    test('a 100-round game counts toward both averages and history', () {
+      // 10 rounds: 5000; 100 rounds: 45000 -> 50000 / 110
+      final s = computeStats([
+        game('g_0001', rounds: 10, total: 5000),
+        game('g_0002', rounds: 100, total: 45000),
+      ]);
+      expect(s.averageAllTime, closeTo(50000 / 110, 1e-9));
+      expect(s.averageLast10, closeTo(50000 / 110, 1e-9));
+      expect(
+        s.historyByTier.values.expand((g) => g).any((g) => g.rounds == 100),
+        isTrue,
+      );
+    });
+
+    test('stored games without any 100-round game still compute', () {
+      final s = computeStats([game('g_0001', rounds: 50, total: 9000)]);
+      expect(s.bestByLength[100], isNull);
+      expect(s.bestByLength.containsKey(100), isTrue);
     });
 
     test('averages are points per round, weighted by rounds', () {

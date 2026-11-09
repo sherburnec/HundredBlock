@@ -1,6 +1,6 @@
 import 'saved_game.dart';
 
-const List<int> kStatLengths = [10, 25, 50];
+const List<int> kStatLengths = [10, 25, 50, 100];
 
 /// Everything the Stats screen shows, computed from the saved games each time.
 class StatsSummary {

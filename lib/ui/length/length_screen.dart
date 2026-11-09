@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../app.dart';
+import '../../stats/stats_calculator.dart';
 import '../round/game_screen.dart';
 
-const List<int> kGameLengths = [10, 25, 50];
+const List<int> kGameLengths = kStatLengths;
 
 class LengthScreen extends StatelessWidget {
   const LengthScreen({super.key});
