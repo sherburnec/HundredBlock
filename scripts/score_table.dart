@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print (a command-line tool: printing is its output)
 // Prints scores for sample distances and times so the scoring constants can be tuned
 // by feel. Run inside the flutter container:
 //   docker compose run --rm flutter dart run scripts/score_table.dart

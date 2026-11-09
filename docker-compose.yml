@@ -32,9 +32,11 @@ services:
 
   serve:
     image: nginx:1.27.3-alpine
+    environment:
+      SUBPATH: ${SUBPATH:-hundred-block}
     volumes:
       - ./build/web:/usr/share/nginx/html:ro
-      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/nginx.conf.template:/etc/nginx/templates/default.conf.template:ro
     ports:
       - "8081:80"
 
@@ -52,7 +54,7 @@ services:
       BASE_URL: http://localhost
     volumes:
       - ./e2e:/work/e2e
-      - ./build/web:/work/build/web:ro
+      - ./build/web:/work/build/web   # read-write: update.spec edits and restores two files
       - ./scripts:/work/scripts:ro
 
 volumes:

@@ -10,19 +10,35 @@ permissions:
 concurrency:
   group: pages
   cancel-in-progress: true
+env:
+  # Same value as the repo name: the app is served under /<repo-name>/ on GitHub Pages.
+  SUBPATH: ${{ github.event.repository.name }}
 jobs:
-  build:
+  test-and-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: docker compose build flutter
-      - name: Build release with the repo name as base href
+      - name: Build images
+        run: docker compose build
+      - name: Format, analyze, unit and widget tests
+        run: |
+          docker compose run --rm flutter flutter pub get
+          docker compose run --rm flutter dart format --set-exit-if-changed .
+          docker compose run --rm flutter flutter analyze
+          docker compose run --rm flutter flutter test
+      - name: Data pipeline tests
+        run: docker compose run --rm data pytest
+      - name: Release build with the repo name as base href
         run: docker compose run --rm -e BASE_HREF=/${{ github.event.repository.name }}/ flutter sh scripts/build_web.sh
+      - name: End-to-end tests against the release build
+        run: |
+          docker compose up -d serve
+          docker compose run --rm -e BASE_URL=http://localhost/${{ github.event.repository.name }}/ e2e
       - uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
   deploy:
-    needs: build
+    needs: test-and-build
     runs-on: ubuntu-latest
     environment:
       name: github-pages

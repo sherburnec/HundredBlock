@@ -120,25 +120,30 @@ class _Stat extends StatelessWidget {
                 style: const TextStyle(fontSize: 18, color: Color(0xFFB8C4D4)),
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                if (detail != null)
+            // Flexible: a very long prompt (the best round's) wraps instead of overflowing.
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
                   Text(
-                    detail!,
+                    value,
+                    textAlign: TextAlign.end,
                     style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFFB8C4D4),
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-              ],
+                  if (detail != null)
+                    Text(
+                      detail!,
+                      textAlign: TextAlign.end,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFFB8C4D4),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ],
         ),

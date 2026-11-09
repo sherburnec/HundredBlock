@@ -186,8 +186,17 @@ class _MapLibreStreetMapState extends State<MapLibreStreetMap>
   Future<void> fitTo(List<LatLon> points) async {
     final c = _c;
     if (c == null || _disposed || points.isEmpty) return;
+    // Respect reduced motion: jump instead of animating the camera.
+    Future<void> go(CameraUpdate u) async {
+      if (widget.request.reduceMotion) {
+        await c.moveCamera(u);
+      } else {
+        await c.animateCamera(u);
+      }
+    }
+
     if (points.length == 1) {
-      await c.animateCamera(
+      await go(
         CameraUpdate.newLatLngZoom(LatLng(points[0].lat, points[0].lon), 16),
       );
       return;
@@ -209,7 +218,7 @@ class _MapLibreStreetMapState extends State<MapLibreStreetMap>
       w -= minSpan / 2;
       e += minSpan / 2;
     }
-    await c.animateCamera(
+    await go(
       CameraUpdate.newLatLngBounds(
         LatLngBounds(southwest: LatLng(s, w), northeast: LatLng(n, e)),
         left: 48,

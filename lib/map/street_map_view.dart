@@ -36,6 +36,7 @@ class StreetMapRequest {
     required this.truth,
     required this.onTap,
     required this.onReady,
+    this.reduceMotion = false,
   });
 
   final StreetMapConfig config;
@@ -51,6 +52,9 @@ class StreetMapRequest {
 
   /// Called once the map is drawn and ready for camera commands.
   final void Function(StreetMapHandle handle) onReady;
+
+  /// The player asked for less motion: move the camera instantly instead of animating.
+  final bool reduceMotion;
 }
 
 /// A map implementation. The app depends on this, not on a map package, so the

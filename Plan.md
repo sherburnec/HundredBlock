@@ -261,21 +261,21 @@ Architecture notes (see Appendix E for the layout). Use plain Dart classes for l
 
 ## Phase 5 — Hardening
 
-- [ ] 5.1 **Offline end-to-end:** e2e that loads the release build, waits for the service worker to finish precaching, goes offline, **reloads**, and plays a full game and opens Stats and About with the network off. Also test that after going offline, a second fresh page in the same context still loads.
-- [ ] 5.2 **Update behavior:** verify that a new build (changed asset) replaces the old cache on the next load and does not leave a stale or broken app. Document the behavior in `README.md`.
-- [ ] 5.3 **Network audit in release build:** the no-third-party test across all screens and a full game, plus the static scan. Ko-fi navigation is the only allowed external hop and only after a tap.
-- [ ] 5.4 **Viewport matrix in Playwright** (Chromium, and WebKit if available): 1024x768, 1280x800 (Android tablet), 1440x960 (Windows tablet), 768x1024 portrait, and a phone size (390x844, smoke only). Screenshots saved to `e2e/screenshots/` and spot-checked: prompt visible above the map, Lock in reachable, no overflow, buttons at least 48 dp.
-- [ ] 5.5 **Touch behavior:** emulate touch in Playwright (`hasTouch`, `isMobile`), verify tap places a marker, drag pans without placing a marker, two-finger zoom does not zoom the page, no page scroll or pull-to-refresh interference.
-- [ ] 5.6 **Load and size:** record first-load transfer size and time with the real data (throttled network profile), cold and warm. Confirm the data files and app are cached after first load. Compare with the Phase 1 estimate and log.
-- [ ] 5.7 **Robustness:** corrupt storage test, storage disabled/full test (game still playable, with a clear message that stats can't be saved), very long and very short prompts fit the UI, rapid double taps on Lock in score once, app-resume after the tab was hidden mid-round (timer paused as specified).
-- [ ] 5.8 **Accessibility basics:** semantics labels on buttons and the prompt, sufficient contrast for the map lines and highlighted streets, respects reduced motion, text scales with system font size without breaking layout.
-- [ ] 5.9 **Real-tablet test plan** written in `HANDOFF.md` (`HUMAN`): exact steps for a Windows tablet and an Android tablet (open the Pages URL, play 10 rounds, turn on airplane mode, reload, play again, export stats), and what to report.
-- [ ] 5.10 **Tuning notes:** add `TUNING.md` listing the placeholder scoring constants and how to change them, with a small script (in the `flutter` container, plain Dart) that prints scores for sample distances and times so the owner can tune by feel.
+- [x] 5.1 **Offline end-to-end:** e2e that loads the release build, waits for the service worker to finish precaching, goes offline, **reloads**, and plays a full game and opens Stats and About with the network off. Also test that after going offline, a second fresh page in the same context still loads.
+- [x] 5.2 **Update behavior:** verify that a new build (changed asset) replaces the old cache on the next load and does not leave a stale or broken app. Document the behavior in `README.md`.
+- [x] 5.3 **Network audit in release build:** the no-third-party test across all screens and a full game, plus the static scan. Ko-fi navigation is the only allowed external hop and only after a tap.
+- [x] 5.4 **Viewport matrix in Playwright** (Chromium, and WebKit if available): 1024x768, 1280x800 (Android tablet), 1440x960 (Windows tablet), 768x1024 portrait, and a phone size (390x844, smoke only). Screenshots saved to `e2e/screenshots/` and spot-checked: prompt visible above the map, Lock in reachable, no overflow, buttons at least 48 dp.
+- [x] 5.5 **Touch behavior:** emulate touch in Playwright (`hasTouch`, `isMobile`), verify tap places a marker, drag pans without placing a marker, two-finger zoom does not zoom the page, no page scroll or pull-to-refresh interference.
+- [x] 5.6 **Load and size:** record first-load transfer size and time with the real data (throttled network profile), cold and warm. Confirm the data files and app are cached after first load. Compare with the Phase 1 estimate and log.
+- [x] 5.7 **Robustness:** corrupt storage test, storage disabled/full test (game still playable, with a clear message that stats can't be saved), very long and very short prompts fit the UI, rapid double taps on Lock in score once, app-resume after the tab was hidden mid-round (timer paused as specified).
+- [x] 5.8 **Accessibility basics:** semantics labels on buttons and the prompt, sufficient contrast for the map lines and highlighted streets, respects reduced motion, text scales with system font size without breaking layout.
+- [x] 5.9 **Real-tablet test plan** written in `HANDOFF.md` (`HUMAN`): exact steps for a Windows tablet and an Android tablet (open the Pages URL, play 10 rounds, turn on airplane mode, reload, play again, export stats), and what to report.
+- [x] 5.10 **Tuning notes:** add `TUNING.md` listing the placeholder scoring constants and how to change them, with a small script (in the `flutter` container, plain Dart) that prints scores for sample distances and times so the owner can tune by feel.
 
-**Exit criteria:**
-- [ ] Full `docker compose run --rm e2e` passes from a clean build.
-- [ ] Offline, audit, viewport and touch tests all pass.
-- [ ] Load and size numbers recorded; no unresolved `BLOCKED` item that affects the release checklist.
+**Exit criteria:** PASSED 2026-11-08 (full e2e: 28 tests pass from a clean build; offline, audit, viewport (Chromium and WebKit), touch, robustness and a11y pass; load 3.7 s cold / 0.4 s warm; no BLOCKED items)
+- [x] Full `docker compose run --rm e2e` passes from a clean build.
+- [x] Offline, audit, viewport and touch tests all pass.
+- [x] Load and size numbers recorded; no unresolved `BLOCKED` item that affects the release checklist.
 
 ---
 

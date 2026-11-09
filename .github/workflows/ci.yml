@@ -7,8 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: docker compose build flutter
+      - run: docker compose build flutter data
       - run: docker compose run --rm flutter flutter pub get
       - run: docker compose run --rm flutter dart format --set-exit-if-changed .
       - run: docker compose run --rm flutter flutter analyze
       - run: docker compose run --rm flutter flutter test
+      - run: docker compose run --rm data pytest

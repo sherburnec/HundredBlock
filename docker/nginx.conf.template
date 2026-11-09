@@ -1,4 +1,5 @@
-# Mimics GitHub Pages: gzip, short cache, also serves the build under /hundred-block/
+# Mimics GitHub Pages: gzip, short cache, also serves the build under /${SUBPATH}/ (default hundred-block).
+# nginx renders this template with envsubst on start.
 server {
   listen 80;
   root /usr/share/nginx/html;
@@ -10,7 +11,7 @@ server {
   gzip_min_length 256;
   add_header Cache-Control "max-age=600";
 
-  location /hundred-block/ {
+  location /${SUBPATH}/ {
     alias /usr/share/nginx/html/;
     try_files $uri $uri/ =404;
   }

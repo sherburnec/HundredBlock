@@ -19,3 +19,4 @@ __pycache__/
 .idea/
 .vscode/
 *.iml
+e2e/screenshots/

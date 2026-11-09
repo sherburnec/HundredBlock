@@ -120,13 +120,17 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
+  /// Text still scales with the system font, up to 1.5x, in the bars around the map.
+  Widget _clampedChrome(BuildContext context, Widget child) =>
+      MediaQuery.withClampedTextScaling(maxScaleFactor: 1.5, child: child);
+
   Widget _roundBody(BuildContext context) {
     final services = AppScope.of(context);
     final result = game.phase == GamePhase.roundResult;
     final prompt = game.currentPrompt;
     return Column(
       children: [
-        _Header(game: game, onQuit: _confirmQuit),
+        _clampedChrome(context, _Header(game: game, onQuit: _confirmQuit)),
         Expanded(
           child: Semantics(
             label: 'Street map. Tap to place your marker.',
@@ -138,11 +142,15 @@ class _GameScreenState extends State<GameScreen> {
                 truth: result ? LatLon(prompt.lat, prompt.lon) : null,
                 onTap: game.placeMarker,
                 onReady: _onMapReady,
+                reduceMotion: MediaQuery.disableAnimationsOf(context),
               ),
             ),
           ),
         ),
-        result ? _ResultBar(game: game) : _LockBar(game: game),
+        _clampedChrome(
+          context,
+          result ? _ResultBar(game: game) : _LockBar(game: game),
+        ),
       ],
     );
   }
@@ -213,17 +221,18 @@ class _LockBar extends StatelessWidget {
     return Container(
       color: const Color(0xFF161D27),
       padding: const EdgeInsets.all(12),
-      child: Row(
+      child: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        runSpacing: 8,
+        spacing: 12,
         children: [
-          Expanded(
-            child: Text(
-              game.marker == null
-                  ? 'Tap the map to place your marker'
-                  : 'Move the marker, then lock in',
-              style: const TextStyle(fontSize: 16, color: Color(0xFFB8C4D4)),
-            ),
+          Text(
+            game.marker == null
+                ? 'Tap the map to place your marker'
+                : 'Move the marker, then lock in',
+            style: const TextStyle(fontSize: 16, color: Color(0xFFB8C4D4)),
           ),
-          const SizedBox(width: 12),
           FilledButton(
             onPressed: game.canLockIn ? game.lockIn : null,
             child: const Text('Lock in'),
