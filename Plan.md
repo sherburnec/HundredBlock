@@ -164,9 +164,9 @@ Goal: prove the five PRD checks and a deploy path with a throwaway-quality app, 
   - **WebGL2:** assert `canvas.getContext('webgl2')` is available in the test browser (use SwiftShader flags in headless Chromium if needed).
 - [x] 1.6 Static scan `scripts/check_no_external.py` (run in a container): grep the built `build/web` for known CDN hostnames (`gstatic.com`, `googleapis.com`, `unpkg.com`, `jsdelivr.net`, `cdnjs`, `cloudflare`), allowing only documented exceptions (for example link text on About). Wire it into `e2e`.
 - [x] 1.7 Map performance probe in Playwright: scripted pan and wheel/pinch zoom with the synthetic grid, sampling `requestAnimationFrame` frame times. Record median and p95 in `DECISIONS.md`. This is indicative only; headless software rendering is slower than a tablet GPU. Add the real-tablet procedure to `HANDOFF.md`.
-- [ ] 1.8 Data size estimate: record the size of the synthetic GeoJSON raw and gzipped, to compare with the real files in Phase 2.
-- [ ] 1.9 Deploy workflow `.github/workflows/pages.yml`: build in containers with `BASE_HREF=/${{ github.event.repository.name }}/`, upload with `actions/upload-pages-artifact`, deploy with `actions/deploy-pages`, on push to `main`. Add a `404.html` copy of `index.html` only if needed for routing. `HUMAN`: create the public repo, push, set Pages source to GitHub Actions (instructions in `HANDOFF.md`).
-- [ ] 1.10 Test the base-href build locally: build with `BASE_HREF=/hundred-block/`, serve under that sub-path in the `serve` service, and re-run the no-external and offline tests against it.
+- [x] 1.8 Data size estimate: record the size of the synthetic GeoJSON raw and gzipped, to compare with the real files in Phase 2.
+- [x] 1.9 Deploy workflow `.github/workflows/pages.yml`: build in containers with `BASE_HREF=/${{ github.event.repository.name }}/`, upload with `actions/upload-pages-artifact`, deploy with `actions/deploy-pages`, on push to `main`. Add a `404.html` copy of `index.html` only if needed for routing. `HUMAN`: create the public repo, push, set Pages source to GitHub Actions (instructions in `HANDOFF.md`).
+- [x] 1.10 Test the base-href build locally: build with `BASE_HREF=/hundred-block/`, serve under that sub-path in the `serve` service, and re-run the no-external and offline tests against it.
 
 **Fallback if `maplibre_gl` fails** (cannot meet offline, no-third-party, or acceptable performance after three fixes): try in this order, logging each in `DECISIONS.md`:
 1. `flutter_map` with no tile layer and GeoJSON drawn as polylines.
@@ -174,11 +174,11 @@ Goal: prove the five PRD checks and a deploy path with a throwaway-quality app, 
 Only stop and ask the user if all three options fail.
 
 **Exit criteria:**
-- [ ] No-third-party test passes against the release build, including under the sub-path.
-- [ ] Offline test passes (reload with network off works).
-- [ ] WebGL2 test passes; map spike pans and zooms with the synthetic grid; frame-time numbers recorded.
-- [ ] Map approach chosen and logged. Offline approach chosen and logged.
-- [ ] Pages workflow file exists and is syntactically valid; `HANDOFF.md` has the HUMAN deploy steps.
+- [x] No-third-party test passes against the release build, including under the sub-path.
+- [x] Offline test passes (reload with network off works).
+- [x] WebGL2 test passes; map spike pans and zooms with the synthetic grid; frame-time numbers recorded.
+- [x] Map approach chosen and logged. Offline approach chosen and logged.
+- [x] Pages workflow file exists and is syntactically valid; `HANDOFF.md` has the HUMAN deploy steps.
 
 ---
 
@@ -206,7 +206,7 @@ Prepare data once at build time with a script. The script takes a city boundary 
 - [ ] 2.12 **Licence record.** Write `DATA_LICENSES.md`: which Overture themes and release, each theme's licence as stated by Overture at that release (transportation derives from OpenStreetMap and carries ODbL attribution requirements), and the exact attribution text the About screen needs, which the pipeline writes into the pack's `city.json` `attribution` list. Check the licences at pull time instead of assuming.
 - [ ] 2.13 **Pipeline tests (`docker compose run --rm data pytest`):** street/suffix normalization cases, unit-duplicate removal, intersection ambiguity rule (a pair meeting twice is dropped), dual-carriageway clustering, output schema validation, determinism (two runs produce identical files), and a fixture run with a tiny non-Burbank boundary (checked in under `pipeline/tests/fixtures`, no network) that produces a schema-valid pack, proving nothing is hardcoded to Burbank.
 
-**Exit criteria:**
+**Exit criteria:** PASSED 2026-11-08 (root and sub-path builds; Chromium; WebKit for non-offline)
 - [ ] Gate passed and counts recorded.
 - [ ] All `assets/cities/burbank/*` files exist, validate against their schemas, and are deterministic across two runs.
 - [ ] `highlights.md` shows all six streets matched with non-zero segments.

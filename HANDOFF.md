@@ -10,3 +10,9 @@ Remaining human steps (the project never blocks on these):
 
 ## Blockers / BLOCKED items
 None yet.
+
+## Deploy (HUMAN)
+`.github/workflows/pages.yml` builds with `BASE_HREF=/<repo-name>/` and deploys on push to `main`. After creating the public repo and pushing: Settings -> Pages -> Source: GitHub Actions.
+
+## Real-tablet map performance (HUMAN)
+Headless software-GL numbers are only indicative. On the tablet: open the Pages URL, play a round, pan and pinch-zoom continuously for 30 s and note whether it feels smooth (target: no visible stutter). Report device model, browser and version.
