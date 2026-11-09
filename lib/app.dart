@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -8,7 +9,11 @@ import 'data/city_pack.dart';
 import 'data/city_pack_repository.dart';
 import 'game/game_controller.dart';
 import 'game/prompt_selector.dart';
+import 'kofi/kofi_tracker.dart';
+import 'platform/interfaces.dart';
+import 'platform/platform.dart';
 import 'map/street_map_view.dart';
+import 'stats/game_store.dart';
 import 'ui/home/home_screen.dart';
 
 /// Everything the screens share: the city pack, the map implementation, clocks.
@@ -18,6 +23,10 @@ class AppServices {
     required this.mapBuilder,
     required this.clock,
     required this.activeClock,
+    required this.store,
+    required this.kofi,
+    required this.downloader,
+    required this.linkOpener,
     Random Function()? randomFactory,
   }) : _randomFactory = randomFactory ?? Random.new;
 
@@ -25,7 +34,20 @@ class AppServices {
   final StreetMapBuilder mapBuilder;
   final Clock clock;
   final ActiveClock activeClock;
+  final GameStore store;
+  final KofiTracker kofi;
+  final FileDownloader downloader;
+  final LinkOpener linkOpener;
   final Random Function() _randomFactory;
+
+  /// True while a round is being played (the Ko-fi counter only runs then).
+  final ValueNotifier<bool> gameInProgress = ValueNotifier<bool>(false);
+
+  /// Starts the once-a-second Ko-fi sampling. Tests drive [KofiTracker.sample] directly.
+  Timer startKofiSampling() => Timer.periodic(
+    const Duration(seconds: 1),
+    (_) => kofi.sample(gameInProgress: gameInProgress.value),
+  );
 
   StreetMapConfig get mapConfig {
     final tier = pack.activeTier;
@@ -174,10 +196,24 @@ Future<AppServices> loadDefaultServices({
   required ActiveClock activeClock,
 }) async {
   final pack = await CityPackRepository().load();
-  return AppServices(
+  final storage = createStorage();
+  final kofi = KofiTracker(
+    activeClock: activeClock,
+    clock: clock,
+    storage: storage,
+    random: Random(),
+  );
+  listenForInteraction(kofi.noteInteraction);
+  final services = AppServices(
     pack: pack,
     mapBuilder: mapBuilder,
     clock: clock,
     activeClock: activeClock,
+    store: GameStore(storage),
+    kofi: kofi,
+    downloader: createFileDownloader(),
+    linkOpener: createLinkOpener(),
   );
+  services.startKofiSampling();
+  return services;
 }

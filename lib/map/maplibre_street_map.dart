@@ -65,6 +65,7 @@ class _MapLibreStreetMapState extends State<MapLibreStreetMap>
         lineCap: 'round',
         lineJoin: 'round',
       ),
+      enableInteraction: false,
     );
     if (_config.highlightedStreets.isNotEmpty) {
       await c.addLineLayer(
@@ -81,6 +82,7 @@ class _MapLibreStreetMapState extends State<MapLibreStreetMap>
           ['get', 'name'],
           ['literal', _config.highlightedStreets],
         ],
+        enableInteraction: false,
       );
     }
     await c.addGeoJsonSource('link', lineCollection(null, null));
@@ -92,6 +94,7 @@ class _MapLibreStreetMapState extends State<MapLibreStreetMap>
         lineWidth: 2.5,
         lineDasharray: [2, 2],
       ),
+      enableInteraction: false,
     );
     await c.addGeoJsonSource(
       'landmarks',
@@ -106,6 +109,7 @@ class _MapLibreStreetMapState extends State<MapLibreStreetMap>
         circleStrokeColor: '#ffffff',
         circleStrokeWidth: 2,
       ),
+      enableInteraction: false,
     );
     await c.addGeoJsonSource('truth', pointCollection(const []));
     await c.addCircleLayer(
@@ -117,6 +121,7 @@ class _MapLibreStreetMapState extends State<MapLibreStreetMap>
         circleStrokeColor: '#ffffff',
         circleStrokeWidth: 3,
       ),
+      enableInteraction: false,
     );
     await c.addGeoJsonSource('guess', pointCollection(const []));
     await c.addCircleLayer(
@@ -128,6 +133,7 @@ class _MapLibreStreetMapState extends State<MapLibreStreetMap>
         circleStrokeColor: '#ffffff',
         circleStrokeWidth: 3,
       ),
+      enableInteraction: false,
     );
     if (_disposed) return;
     _layersReady = true;
@@ -243,6 +249,8 @@ class _MapLibreStreetMapState extends State<MapLibreStreetMap>
           rotateGesturesEnabled: false,
           tiltGesturesEnabled: false,
           attributionButtonPosition: null,
+          // Taps on streets must still place the marker.
+          featureTapsTriggersMapClick: true,
           onMapCreated: (c) => _c = c,
           onStyleLoadedCallback: _onStyleLoaded,
           onCameraMove: (_) => _updateLabels(),

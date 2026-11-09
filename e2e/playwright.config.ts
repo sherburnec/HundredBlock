@@ -30,6 +30,6 @@ export default defineConfig({
   timeout: 120_000,
   workers: 1,
   reporter: [['list']],
-  use: { baseURL },
+  use: { baseURL, screenshot: 'only-on-failure' },
   projects,
 });

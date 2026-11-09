@@ -6,7 +6,7 @@ import 'app.dart';
 import 'core/active_clock.dart';
 import 'core/clock.dart';
 import 'map/maplibre_street_map.dart';
-import 'platform/visibility.dart';
+import 'platform/platform.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

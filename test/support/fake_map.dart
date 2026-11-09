@@ -7,7 +7,11 @@ import 'package:hundred_block/core/active_clock.dart';
 import 'package:hundred_block/core/clock.dart';
 import 'package:hundred_block/data/city_pack.dart';
 import 'package:hundred_block/data/city_pack_repository.dart';
+import 'package:hundred_block/kofi/kofi_tracker.dart';
 import 'package:hundred_block/map/street_map_view.dart';
+import 'package:hundred_block/platform/interfaces.dart';
+import 'package:hundred_block/stats/game_store.dart';
+import 'package:hundred_block/stats/key_value_storage.dart';
 import 'package:hundred_block/ui/home/home_screen.dart';
 
 /// Records what the game asked the map to do; tapping it reports [tapPoint].
@@ -67,11 +71,24 @@ Future<CityPack> loadRealPack() async =>
     _cached ??= await CityPackRepository(loader: _read).load();
 
 class TestApp {
-  TestApp(this.services, this.clock, this.visibility, this.log);
+  TestApp(
+    this.services,
+    this.clock,
+    this.visibility,
+    this.log,
+    this.storage,
+    this.downloader,
+    this.links,
+  );
   final AppServices services;
   final FakeClock clock;
   final FakeVisibility visibility;
   final FakeMapLog log;
+  final MemoryStorage storage;
+  final FakeFileDownloader downloader;
+  final FakeLinkOpener links;
+
+  KofiTracker get kofi => services.kofi;
 
   Widget widget() => AppScope(
     services: services,
@@ -79,17 +96,30 @@ class TestApp {
   );
 }
 
-Future<TestApp> makeTestApp({int seed = 1}) async {
+Future<TestApp> makeTestApp({int seed = 1, MemoryStorage? storage}) async {
   final pack = await loadRealPack();
   final clock = FakeClock();
   final vis = FakeVisibility();
   final log = FakeMapLog();
+  final store = storage ?? MemoryStorage();
+  final active = ActiveClock(clock, vis);
+  final downloader = FakeFileDownloader();
+  final links = FakeLinkOpener();
   final services = AppServices(
     pack: pack,
     mapBuilder: fakeMapBuilder(log),
     clock: clock,
-    activeClock: ActiveClock(clock, vis),
+    activeClock: active,
+    store: GameStore(store),
+    kofi: KofiTracker(
+      activeClock: active,
+      clock: clock,
+      storage: store,
+      random: Random(seed),
+    ),
+    downloader: downloader,
+    linkOpener: links,
     randomFactory: () => Random(seed),
   );
-  return TestApp(services, clock, vis, log);
+  return TestApp(services, clock, vis, log, store, downloader, links);
 }

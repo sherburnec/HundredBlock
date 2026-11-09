@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../app.dart';
+import '../../config.dart';
 import '../../core/format.dart';
 import '../../data/city_pack.dart';
 import '../../game/game_controller.dart';
@@ -26,8 +27,15 @@ class _GameScreenState extends State<GameScreen> {
   StreetMapHandle? _map;
   GamePhase _phase = GamePhase.roundActive;
   int _round = 0;
+  AppServices? _services;
 
   GameController get game => widget.game;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _services ??= AppScope.of(context)..gameInProgress.value = true;
+  }
 
   @override
   void initState() {
@@ -41,6 +49,7 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   void dispose() {
+    _services?.gameInProgress.value = false;
     _ticker?.cancel();
     game.removeListener(_onGame);
     super.dispose();
@@ -60,6 +69,7 @@ class _GameScreenState extends State<GameScreen> {
       _map?.fitTo([?guess, LatLon(p.lat, p.lon)]);
     } else if (game.phase == GamePhase.summary) {
       _map = null;
+      _services?.gameInProgress.value = false;
     }
     setState(() {});
   }
@@ -224,13 +234,20 @@ class _LockBar extends StatelessWidget {
   }
 }
 
-class _ResultBar extends StatelessWidget {
+class _ResultBar extends StatefulWidget {
   const _ResultBar({required this.game});
 
   final GameController game;
 
   @override
+  State<_ResultBar> createState() => _ResultBarState();
+}
+
+class _ResultBarState extends State<_ResultBar> {
+  @override
   Widget build(BuildContext context) {
+    final game = widget.game;
+    final services = AppScope.of(context);
     final r = game.lastResult!;
     final String detail;
     if (r.guess == null) {
@@ -242,35 +259,97 @@ class _ResultBar extends StatelessWidget {
       detail = '${formatInt(r.distanceFt!)} ft away';
     }
     return Container(
+      width: double.infinity,
       color: const Color(0xFF161D27),
       padding: const EdgeInsets.all(12),
-      child: Wrap(
-        alignment: WrapAlignment.spaceBetween,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        runSpacing: 8,
-        spacing: 16,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Semantics(
-            label: 'Round result. $detail. ${r.points} points.',
-            excludeSemantics: true,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(detail, style: const TextStyle(fontSize: 18)),
-                Text(
-                  '${formatInt(r.points)} points',
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFFFFD23F),
-                  ),
-                ),
-              ],
+          if (services.kofi.eligible)
+            _KofiBanner(
+              onSupport: () {
+                services.linkOpener.open(kKofiUrl);
+                setState(services.kofi.reset);
+              },
+              onDismiss: () => setState(services.kofi.reset),
             ),
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runSpacing: 8,
+            spacing: 16,
+            children: [
+              Semantics(
+                label: 'Round result. $detail. ${r.points} points.',
+                excludeSemantics: true,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(detail, style: const TextStyle(fontSize: 18)),
+                    Text(
+                      '${formatInt(r.points)} points',
+                      style: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFFFFD23F),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              FilledButton(
+                onPressed: game.next,
+                child: Text(game.isLastRound ? 'Finish' : 'Next round'),
+              ),
+            ],
           ),
-          FilledButton(
-            onPressed: game.next,
-            child: Text(game.isLastRound ? 'Finish' : 'Next round'),
+        ],
+      ),
+    );
+  }
+}
+
+/// Small, dismissible support prompt shown between rounds after a few hours of play.
+class _KofiBanner extends StatelessWidget {
+  const _KofiBanner({required this.onSupport, required this.onDismiss});
+
+  final VoidCallback onSupport;
+  final VoidCallback onDismiss;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E2733),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFF3A4A5E)),
+      ),
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        alignment: WrapAlignment.spaceBetween,
+        runSpacing: 8,
+        spacing: 12,
+        children: [
+          const Text(
+            'Enjoying Hundred Block? It is free. You can support it on Ko-fi.',
+            style: TextStyle(fontSize: 16),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton(onPressed: onDismiss, child: const Text('Dismiss')),
+              const SizedBox(width: 8),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(120, 48),
+                ),
+                onPressed: onSupport,
+                child: const Text('Support on Ko-fi'),
+              ),
+            ],
           ),
         ],
       ),
