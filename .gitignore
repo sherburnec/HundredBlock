@@ -28,3 +28,4 @@ android/local.properties
 *.keystore
 android/.gradle/
 android/app/.cxx/
+android/keystore/
