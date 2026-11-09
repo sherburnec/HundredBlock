@@ -17,7 +17,7 @@ jobs:
   test-and-build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Build images
         run: docker compose build
       - name: Format, analyze, unit and widget tests
@@ -34,6 +34,18 @@ jobs:
         run: |
           docker compose up -d serve
           docker compose run --rm -e BASE_URL=http://localhost/${{ github.event.repository.name }}/ e2e
+      - name: Show server log and failure details if e2e failed
+        if: failure()
+        run: |
+          docker compose ps -a || true
+          docker compose logs --tail=50 serve || true
+          find e2e/test-results -maxdepth 2 -name 'error-context.md' -exec sh -c 'echo "== $1"; head -c 3000 "$1"' _ {} \; || true
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-test-results
+          path: e2e/test-results
+          if-no-files-found: ignore
       - uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
