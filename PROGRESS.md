@@ -4,7 +4,7 @@ Local only, no off-device backup (no git remote `origin`). First item in HANDOFF
 
 - v0.1.0 and plan rounds-100 are complete and archived in `plans/`.
 - **Active plan:** `Plan.md` (Android APK), branch `feature/android-apk`.
-- Done: tasks 1-4 (android project and build service; platform split; native storage, lifecycle, share, link). Both `build_android.sh` and `build_web.sh` build; flutter test 135 pass.
-- Next: task 5, native map fixes (landmark label pixel ratio, verify plugin source). `git push` to origin fails (auth); push manually later.
-- Last check: analyze clean, flutter test 135 passed, APK 79.0 MB built, web build and check_no_external OK.
+- Done: tasks 1-5 (android project and build service; platform split; native services; label pixel-ratio fix).
+- Next: task 6, back button (PopScope), lifecycle and system UI/SafeArea. `git push` to origin fails (auth); push manually later.
+- Last check: format clean, analyze clean, flutter test 138 passed.
 - Remaining HUMAN-only items from v0.1.0 are in HANDOFF.md.

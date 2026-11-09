@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 
 import '../data/city_pack.dart';
 import 'map_style.dart';
+import 'screen_point.dart';
 import 'street_map_view.dart';
 
 /// [StreetMapBuilder] backed by maplibre_gl (WebGL, GeoJSON layers, no tiles).
@@ -232,10 +234,19 @@ class _MapLibreStreetMapState extends State<MapLibreStreetMap>
   Future<void> _updateLabels() async {
     final c = _c;
     if (c == null || _disposed || !_layersReady) return;
+    // Read before the awaits: MapLibre Native reports physical pixels, web reports CSS pixels.
+    final ratio = MediaQuery.devicePixelRatioOf(context);
     final out = <Offset?>[];
     for (final l in _config.landmarks) {
       final p = await c.toScreenLocation(LatLng(l.lat, l.lon));
-      out.add(Offset(p.x.toDouble(), p.y.toDouble()));
+      out.add(
+        screenPointToLogical(
+          p.x,
+          p.y,
+          physicalPixels: !kIsWeb,
+          devicePixelRatio: ratio,
+        ),
+      );
     }
     if (!mounted) return;
     setState(() => _labelPos = out);
