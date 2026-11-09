@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
 
-void main() => runApp(const HundredBlockApp());
+import 'spike/spike_screen.dart';
+
+void main() {
+  MapLibreMap.webLibrarySource = MapLibreJsSource.urls(
+    scriptUrl: Uri.base.resolve('maplibre/maplibre-gl.mjs').toString(),
+    styleUrl: Uri.base.resolve('maplibre/maplibre-gl.css').toString(),
+  );
+  runApp(const HundredBlockApp());
+}
 
 class HundredBlockApp extends StatelessWidget {
   const HundredBlockApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Hundred Block',
-      home: Scaffold(body: Center(child: Text('Hundred Block'))),
+      theme: ThemeData(fontFamily: 'Roboto'),
+      home: const SpikeScreen(),
     );
   }
 }

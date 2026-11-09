@@ -43,10 +43,13 @@ services:
       context: .
       dockerfile: docker/e2e.Dockerfile
     image: hundredblock-e2e
+    # shares the serve container network so the app is http://localhost (a secure context for service workers)
+    network_mode: "service:serve"
     depends_on: [serve]
     working_dir: /work/e2e
+    command: sh /work/scripts/e2e.sh
     environment:
-      BASE_URL: http://serve
+      BASE_URL: http://localhost
     volumes:
       - ./e2e:/work/e2e
       - ./build/web:/work/build/web:ro
