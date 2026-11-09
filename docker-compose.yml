@@ -20,6 +20,16 @@ services:
       - "8080:8080"
     command: flutter run -d web-server --web-hostname 0.0.0.0 --web-port 8080
 
+
+  android:
+    image: hundredblock-flutter
+    depends_on: [flutter]
+    working_dir: /app
+    volumes:
+      - .:/app
+      - pub-cache:/root/.pub-cache
+      - gradle-cache:/root/.gradle
+
   data:
     build:
       context: .
@@ -60,3 +70,4 @@ services:
 volumes:
   pub-cache:
   raw-data:
+  gradle-cache:

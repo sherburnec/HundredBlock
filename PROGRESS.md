@@ -4,7 +4,7 @@ Local only, no off-device backup (no git remote `origin`). First item in HANDOFF
 
 - v0.1.0 and plan rounds-100 are complete and archived in `plans/`.
 - **Active plan:** `Plan.md` (Android APK), branch `feature/android-apk`.
-- Done: task 1 (android/ project generated, applicationId `app.hundredblock`, minSdk 29).
-- Next: task 2, add the `android` compose service and `scripts/build_android.sh`, then check a first APK build works in the container (Gradle cache volume, licenses).
-- Last check: `flutter analyze` after task 1 (see commit).
+- Done: tasks 1 and 2 (android/ project; `android` compose service builds a debug-signed 77 MB universal APK in 58 s warm).
+- Next: task 3, platform split (conditional export, keep VM tests on the fakes). `git push` to origin fails (auth); push manually later.
+- Last check: `docker compose run --rm android sh scripts/build_android.sh` exit 0.
 - Remaining HUMAN-only items from v0.1.0 are in HANDOFF.md.
