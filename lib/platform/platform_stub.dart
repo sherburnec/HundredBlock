@@ -3,6 +3,9 @@ import '../stats/key_value_storage.dart';
 import 'interfaces.dart';
 
 /// VM/test implementations: always visible, in-memory storage, no downloads or links.
+/// Async setup that must finish before [runApp] (nothing to do here).
+Future<void> initPlatform() async {}
+
 VisibilitySource createVisibilitySource() => _AlwaysVisible();
 
 KeyValueStorage createStorage() => MemoryStorage();

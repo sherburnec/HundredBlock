@@ -6,6 +6,9 @@ import '../core/active_clock.dart';
 import '../stats/key_value_storage.dart';
 import 'interfaces.dart';
 
+/// Async setup that must finish before [runApp] (nothing to do on web).
+Future<void> initPlatform() async {}
+
 /// Page visibility from the browser's `visibilitychange` event.
 VisibilitySource createVisibilitySource() => _WebVisibility();
 
