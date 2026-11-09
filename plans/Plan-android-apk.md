@@ -53,17 +53,17 @@ Ship Hundred Block as an installable **Android APK** for phones and tablets made
 - [x] 10. **APK checks.** Add `scripts/check_apk.sh` (runs in the container with the SDK build-tools): fail if the release manifest requests `INTERNET` or any other dangerous permission; print the declared permissions, `minSdk`, `versionName`, `versionCode` and size; confirm the city pack assets are inside the APK. Wire it into `build_android.sh`.
 - [x] 11. **CI.** Add a job to `.github/workflows/ci.yml` (after tests pass) that runs `docker compose run --rm android sh scripts/build_android.sh` and uploads the APK as a workflow artifact. Do not touch the Pages deploy. Do not store secrets in the workflow; CI builds are debug-signed.
 - [x] 12. **Docs.** `README.md` (how to build the APK, how to install it), `PRD.md` (Android target, devices 2020+, behaviors above; do not edit archived plans), `HANDOFF.md` (device test plan, signing steps, install via `adb` or file copy, that the app and website update separately, how to bump the version), `DECISIONS.md` entries for `minSdk`, application id, packages, platform-split choice, signing default. Update the `CLAUDE.md` commands list if the real service or script names differ from what is written there.
-- [ ] 13. **Full verification.** Fresh builds. Run: format check, analyze, `flutter test`, `data pytest` (unaffected), the Android build, `check_apk.sh`, then web release build and the full `e2e` suite to prove web is unchanged. Record results under **Exit criteria**.
-- [ ] 14. **Archive and hand over.** Update `PROGRESS.md`. Final commit: `git mv Plan.md plans/Plan-android-apk.md`. Stop; the owner runs the device test and merges `feature/android-apk` into `main`.
+- [x] 13. **Full verification.** Fresh builds. Run: format check, analyze, `flutter test`, `data pytest` (unaffected), the Android build, `check_apk.sh`, then web release build and the full `e2e` suite to prove web is unchanged. Record results under **Exit criteria**.
+- [x] 14. **Archive and hand over.** Update `PROGRESS.md`. Final commit: `git mv Plan.md plans/Plan-android-apk.md`. Stop; the owner runs the device test and merges `feature/android-apk` into `main`.
 
 ## Exit criteria (run and record)
 
-- [ ] `dart format --set-exit-if-changed .`, `flutter analyze` and `flutter test` pass, including the no-hardcoding guard.
-- [ ] `docker compose run --rm android sh scripts/build_android.sh` produces `build/app/outputs/flutter-apk/app-release.apk` from a clean checkout using Docker only.
-- [ ] `check_apk.sh` passes: no `INTERNET` permission, `minSdk` 29, city pack inside the APK.
-- [ ] Web release build and the full `e2e` suite still pass; `git diff main --stat` shows no changes to scoring, data packs, pipeline, storage keys or export shape.
-- [ ] Layout widget tests pass at 360x640, 412x915 and 800x1280, portrait and landscape.
-- [ ] Docs updated; `PROGRESS.md` updated.
+- [x] `dart format --set-exit-if-changed .`, `flutter analyze` and `flutter test` pass, including the no-hardcoding guard.
+- [x] `docker compose run --rm android sh scripts/build_android.sh` produces `build/app/outputs/flutter-apk/app-release.apk` from a clean checkout using Docker only.
+- [x] `check_apk.sh` passes: no `INTERNET` permission, `minSdk` 29, city pack inside the APK.
+- [x] Web release build and the full `e2e` suite still pass; `git diff main --stat` shows no changes to scoring, data packs, pipeline, storage keys or export shape.
+- [x] Layout widget tests pass at 360x640, 412x915 and 800x1280, portrait and landscape.
+- [x] Docs updated; `PROGRESS.md` updated.
 - [ ] **Owner device test (human, not blocking the archive):** install on at least one phone and one tablet from 2020 or later; play a 10-round game; check the map, timer pause on app switch, back button, export share sheet, Ko-fi link, airplane-mode play, and that stats survive a force-close. Record results in `HANDOFF.md`. Docker on Windows cannot run an emulator, so this step cannot be automated.
 
 ## Defaults used (log in `DECISIONS.md`)
@@ -80,3 +80,11 @@ Ship Hundred Block as an installable **Android APK** for phones and tablets made
 | Web stats to app | Not migrated; export JSON only |
 | Orientation | Not locked |
 | CI artifact | Debug-signed APK, workflow artifact only |
+
+## Results (2026-11-09)
+
+- Format clean, analyze no issues, `flutter test` 167 passed (includes the no-hardcoding guard, the Android back tests, the nine-size layout and 48 dp touch-target tests, and the pixel-ratio unit tests). `data pytest` 44 passed.
+- `docker compose run --rm android sh scripts/build_android.sh` produced `app-release.apk` (78,976,263 bytes, 79.0 MB, universal, debug-signed because no key exists yet; release signing verified earlier with a throwaway key). Cold build 729 s before SDK pins went into the image, 58 s to about 3 min warm afterwards.
+- `check_apk.sh`: package `app.hundredblock`, versionName 1.0.0 / versionCode 1, minSdk 29, targetSdk 36, permissions only `ACCESS_NETWORK_STATE` and the AndroidX `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`, 7 city pack files inside. It caught INTERNET, WIFI_STATE and both location permissions (declared by MapLibre Native) on its first run; they are now removed in the app manifest.
+- Web: release build and `check_no_external` OK; full e2e 31 passed in 7.6 min (Chromium and WebKit, including the new 360x640 viewport case). `git diff main --stat` shows no changes to assets, pipeline, scoring, stats, game logic, storage keys or the export shape.
+- **Not verified (needs a real device, listed in `HANDOFF.md` section 8):** the map drawing with no INTERNET permission, landmark label alignment after the pixel-ratio fix, the launcher icon, the share sheet, background pause, and install on a phone and a tablet. GitHub CI for the new `android` job has not run (push to origin fails with an authentication error from this machine).

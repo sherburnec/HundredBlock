@@ -145,7 +145,7 @@ void _expectTouchTargets(WidgetTester tester, String where) {
   ];
   expect(targets, isNotEmpty, reason: where);
   for (final w in targets) {
-    final size = tester.getSize(find.byWidget(w as Widget));
+    final size = tester.getSize(find.byWidget(w));
     expect(
       size.shortestSide,
       greaterThanOrEqualTo(48),
