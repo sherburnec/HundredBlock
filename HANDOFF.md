@@ -23,7 +23,7 @@ decision). None of it blocks the code.
 | 0 Scaffold | `docker compose build`, analyze, test, release build and `serve` all pass. Nothing installed on the host. |
 | 1 Spike | MapLibre (`maplibre_gl` 0.27.1) chosen, no fallback needed. Custom service worker chosen. No-third-party, offline and WebGL2 tests pass on the root and the `/hundred-block/` builds. |
 | 2 Data | Gate passed: 24,973 cleaned addresses (minimum 5,000). Six highlights matched, Costco sourced from Overture, pack 1.08 MB raw / 268 KB gzipped, 44 pytest tests. |
-| 3 Game loop | Full 10, 25 and 50 round games pass on the real map in Chromium with zero off-origin requests. Scoring vectors and the no-hardcoding guard pass. |
+| 3 Game loop | Full 10, 25 and 50 round games passed in v0.1.0 (100 added in rounds-100) on the real map in Chromium with zero off-origin requests. Scoring vectors and the no-hardcoding guard pass. |
 | 4 Stats | Export validated in the browser, stats survive reload, Ko-fi never shows at launch, About shows both attributions. |
 | 5 Hardening | Offline full game, update behaviour, audit of every screen, viewport matrix (Chromium and WebKit), touch gestures, robustness and accessibility checks pass. See `DECISIONS.md` for load and frame-time numbers. |
 | 6 Release | See the end of `Plan.md` (release checklist). |
@@ -99,6 +99,10 @@ See `DATA_LICENSES.md` ("Open question"). Confirm with Overture or the county, o
 - Stats live in browser storage, which a browser can clear. Export is the backup.
 - Some Overture street segments are named oddly (frontage roads, ramps). They are drawn but never used in prompts;
   the exclusion list is in `pipeline/cities/burbank.toml`.
+
+## Possible later feature: resume an interrupted long game
+
+A 100-round game can take up to about 50 minutes, and quitting (or closing the tab) abandons it without saving. Saving progress so an interrupted game can be resumed was left out of the rounds-100 plan on purpose.
 
 ## 7. BLOCKED items
 

@@ -12,7 +12,7 @@ The first build is one difficulty, one city and one platform: the browser on tab
 | --- | --- |
 | Burbank only, real addresses and intersections from Overture | Other cities |
 | One difficulty: street outline with Costco and six highlighted streets | More difficulty tiers and more landmarks |
-| After pressing Play, choose 10, 25 or 50 rounds | Endless mode |
+| After pressing Play, choose 10, 25, 50 or 100 rounds | Endless mode |
 | Distance and speed scoring | Address-number scoring |
 | Stats: best score, averages, per-tier history, JSON export | Stats import |
 | Fully offline after first load, no outbound reporting | Leaderboard (opt-in, needs a server) |
@@ -22,10 +22,10 @@ Flutter is the chosen stack, hosted as a static site on GitHub Pages.
 
 ## Gameplay and screens
 
-A game is 10, 25 or 50 rounds with no repeated prompt. Each round shows one address or intersection with no other context, and the player has 30 seconds to tap where it is.
+A game is 10, 25, 50 or 100 rounds with no repeated prompt. Each round shows one address or intersection with no other context, and the player has 30 seconds to tap where it is.
 
 1. **Home:** Play, Stats, About.
-2. **Length:** after Play, the player picks 10, 25 or 50 rounds.
+2. **Length:** after Play, the player picks 10, 25, 50 or 100 rounds.
 3. **Round:** the prompt sits above a free-zoom street map. A tap places a marker, and a Lock in button submits it. The timer starts when the prompt appears.
 4. **Round result:** the true spot, the player's marker, a line between them, the distance in feet, and the points earned.
 5. **Game summary:** total score, average points per round, best round, and a save to stats.
@@ -87,15 +87,15 @@ d is distance in meters, t is seconds from prompt to Lock in. Falloff is 150 m, 
 | 492 ft (150 m) | 10 s | 337 |
 | 1,312 ft (400 m) | 10 s | 64 |
 
-The speed factor multiplies the distance score, so a fast tap cannot rescue a poor guess. Totals from 10, 25 and 50 round games are not comparable, so stats use points per round.
+The speed factor multiplies the distance score, so a fast tap cannot rescue a poor guess. Totals from 10, 25, 50 and 100 round games are not comparable, so stats use points per round.
 
-The first build has one game mode (10, 25 or 50 rounds), so this is the only scoring rule. Scoring for endless mode is not specified and waits for that mode.
+The first build has one game mode (10, 25, 50 or 100 rounds), so this is the only scoring rule. Scoring for endless mode is not specified and waits for that mode.
 
 ## Stats and export
 
 Stats are saved on the device after each finished game. Nothing leaves the device unless the player exports a file.
 
-- **Best score:** shown per game length (10, 25, 50), since totals are not comparable across lengths.
+- **Best score:** shown per game length (10, 25, 50, 100), since totals are not comparable across lengths.
 - **Averages:** points per round, over all time and over the last 10 games.
 - **Per-tier history:** a list of finished games for each tier, tagged with a city id. The first build has one city and one tier, but both ids are kept so more can be added.
 - **JSON export:** a Stats button downloads one file the player can save. Import is not in the first build.
@@ -161,7 +161,7 @@ Work runs in this order, with the data count as a gate:
 The first build is done when all of these hold:
 
 - [ ] It plays start to finish in the browser on a Windows tablet and an Android tablet, both made in 2021 or later.
-- [ ] Home, Play, a choice of 10, 25 or 50 rounds, the rounds and the summary all work for every length.
+- [ ] Home, Play, a choice of 10, 25, 50 or 100 rounds, the rounds and the summary all work for every length.
 - [ ] The map shows only the street outline, Costco and the six highlighted streets, with free pan and zoom.
 - [ ] Rounds use real Burbank addresses and intersections, with no repeats in one game.
 - [ ] Scoring matches the formula and the table above, checked by unit tests.

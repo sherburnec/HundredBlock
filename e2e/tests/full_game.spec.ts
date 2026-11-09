@@ -7,9 +7,9 @@ test('WebGL2 is available', async ({ page }) => {
   expect(ok).toBe(true);
 });
 
-for (const rounds of [10, 25, 50]) {
-  test(`full ${rounds} round game on the real map, no off-origin requests`, async ({ page, baseURL }) => {
-    test.setTimeout(rounds === 50 ? 600_000 : 300_000);
+for (const rounds of [10, 25, 50, 100]) {
+  test(`full ${rounds} round game${rounds === 100 ? " @long" : ""} on the real map, no off-origin requests`, async ({ page, baseURL }) => {
+    test.setTimeout(rounds === 100 ? 1_200_000 : rounds === 50 ? 600_000 : 300_000);
     const urls = trackRequests(page);
     await openHome(page);
     await startGame(page, rounds);

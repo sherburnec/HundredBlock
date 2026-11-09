@@ -36,19 +36,19 @@ The game is named Hundred Block, so add **100 rounds** as a fourth game length b
   - Stats: a saved 100-round game shows as the best for length 100 only, counts toward both averages by points per round, and appears in history. A stored game list with no 100-round games still computes (no null-key crash).
   - Widget: Length screen shows four buttons; tapping "100 rounds" starts a 100-round game; the Stats screen shows four best-score rows.
   - Layout: Length and Stats screens render without overflow at the phone size and with large text scale (reuse the existing large-text widget test pattern).
-- [ ] 4. **e2e.** Add 100 to the lengths in `e2e/tests/full_game.spec.ts` (tap and lock immediately), with a timeout scaled from the 50-round one (it uses 600 s, so use about 1,200 s). Assert the summary appears, the total equals the sum of round points, and zero off-origin requests. If the 100-round run makes the full e2e suite impractically slow (over about 20 minutes total), keep it but tag it so it can be run on its own, and log the timings in `DECISIONS.md`.
-- [ ] 5. **Viewport check.** Re-run the viewport matrix (`e2e/tests/viewport.spec.ts`) and confirm the Length screen screenshots show all four buttons, nothing clipped, in Chromium and WebKit. Add the Length screen to the matrix if it is not already covered.
-- [ ] 6. **Docs.** Update "10, 25 or 50" to "10, 25, 50 or 100" in `README.md`, `PRD.md` (lines on game length, length screen, best score per length, release checklist), `TUNING.md` (totals not comparable across lengths), and the `HANDOFF.md` tablet test plan if it names lengths. Add to `HANDOFF.md` a short "possible later feature: resume an interrupted long game". Do not edit the archived files in `plans/`. Add a short entry to `DECISIONS.md`.
-- [ ] 7. **Full verification.** Fresh release build, then run: format check, analyze, `flutter test`, `data pytest` (should be unaffected), and the full `e2e` suite. Record results under **Exit criteria**.
-- [ ] 8. **Archive and hand over.** Update `PROGRESS.md`. Final commit: `git mv Plan.md plans/Plan-rounds-100.md`. Stop; the owner merges `feature/rounds-100` into `main`.
+- [x] 4. **e2e.** Add 100 to the lengths in `e2e/tests/full_game.spec.ts` (tap and lock immediately), with a timeout scaled from the 50-round one (it uses 600 s, so use about 1,200 s). Assert the summary appears, the total equals the sum of round points, and zero off-origin requests. If the 100-round run makes the full e2e suite impractically slow (over about 20 minutes total), keep it but tag it so it can be run on its own, and log the timings in `DECISIONS.md`.
+- [x] 5. **Viewport check.** Re-run the viewport matrix (`e2e/tests/viewport.spec.ts`) and confirm the Length screen screenshots show all four buttons, nothing clipped, in Chromium and WebKit. Add the Length screen to the matrix if it is not already covered.
+- [x] 6. **Docs.** Update "10, 25 or 50" to "10, 25, 50 or 100" in `README.md`, `PRD.md` (lines on game length, length screen, best score per length, release checklist), `TUNING.md` (totals not comparable across lengths), and the `HANDOFF.md` tablet test plan if it names lengths. Add to `HANDOFF.md` a short "possible later feature: resume an interrupted long game". Do not edit the archived files in `plans/`. Add a short entry to `DECISIONS.md`.
+- [x] 7. **Full verification.** Fresh release build, then run: format check, analyze, `flutter test`, `data pytest` (should be unaffected), and the full `e2e` suite. Record results under **Exit criteria**.
+- [x] 8. **Archive and hand over.** Update `PROGRESS.md`. Final commit: `git mv Plan.md plans/Plan-rounds-100.md`. Stop; the owner merges `feature/rounds-100` into `main`.
 
 ## Exit criteria (run and record)
 
-- [ ] `dart format --set-exit-if-changed .`, `flutter analyze` and `flutter test` pass, including the no-hardcoding guard.
-- [ ] Widget flow passes for 10, 25, 50 and 100 rounds, including timeout paths.
-- [ ] Real-map e2e plays 10, 25, 50 and 100 rounds with zero off-origin requests; offline, audit, viewport and touch tests still pass.
-- [ ] Stats screen shows four best-score rows; a pre-change export or saved-games list still loads; export is still version 1.
-- [ ] Docs updated; `git diff main --stat` shows no changes to scoring, data packs, pipeline or storage keys.
+- [x] `dart format --set-exit-if-changed .`, `flutter analyze` and `flutter test` pass, including the no-hardcoding guard.
+- [x] Widget flow passes for 10, 25, 50 and 100 rounds, including timeout paths.
+- [x] Real-map e2e plays 10, 25, 50 and 100 rounds with zero off-origin requests; offline, audit, viewport and touch tests still pass.
+- [x] Stats screen shows four best-score rows; a pre-change export or saved-games list still loads; export is still version 1.
+- [x] Docs updated; `git diff main --stat` shows no changes to scoring, data packs, pipeline or storage keys.
 
 ## Defaults used (log in `DECISIONS.md`)
 
@@ -59,3 +59,9 @@ The game is named Hundred Block, so add **100 rounds** as a fourth game length b
 | Address/intersection split | 50 / 50 |
 | Mid-game save or resume | Not built; quitting abandons the game as today |
 | e2e time for 100 rounds | Tap and lock immediately; own timeout; tagged if too slow |
+
+## Results (2026-11-09)
+
+- Format clean, analyze no issues, `flutter test` 135 passed (includes no-hardcoding guard; widget flow for 10/25/50/100 with timeout paths).
+- Fresh release build; e2e 29 passed in 8.0 min (Chromium + WebKit viewport). Real-map games 10/25/50/100 took 12.5 s / 25.8 s / 47.5 s / 1.5 min, zero off-origin requests. Offline, audit, viewport (now incl. Length screen), touch pass.
+- `data pytest` 44 passed. `git diff main --stat` shows no changes to scoring, assets, pipeline or storage keys. Export still version 1.

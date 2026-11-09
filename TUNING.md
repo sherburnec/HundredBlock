@@ -39,4 +39,4 @@ then rebuild and redeploy.
 
 - Stats compare **points per round**, not totals, so changing `maxPoints` makes old saved games not comparable with
   new ones. Exports carry the points as they were scored at the time.
-- Totals from 10, 25 and 50 round games are not comparable with each other.
+- Totals from 10, 25, 50 and 100 round games are not comparable with each other.

@@ -2,7 +2,7 @@
 
 A free, offline-capable game for the web. You are shown a real Burbank, CA address or intersection and have 30 seconds
 to tap where it is on a street-outline map (no basemap, no labels). Rounds are scored on distance and speed. A game is
-10, 25 or 50 rounds. Stats stay in your browser and can be exported as JSON. It is a Flutter web app hosted as a static
+10, 25, 50 or 100 rounds. Stats stay in your browser and can be exported as JSON. It is a Flutter web app hosted as a static
 site on GitHub Pages.
 
 Every city is a self-contained data pack under `assets/cities/<city>/`. Burbank is the only pack in this build, and the
@@ -40,12 +40,12 @@ commands that pass container paths.
 ## What the tests check
 
 - **Flutter** (`test/`): scoring vectors, geo maths, prompt selection, the game state machine, the Ko-fi counter,
-  stats and export, widget flows for 10/25/50 rounds with a fake map, long prompts and large text, colour contrast, and
+  stats and export, widget flows for 10/25/50/100 rounds with a fake map, long prompts and large text, colour contrast, and
   a guard that fails if Burbank names or coordinates appear in `lib/`.
 - **Data pipeline** (`pipeline/tests/`): street normalisation, address cleaning, intersection rules, schema validation,
   determinism, and a build of a tiny non-Burbank fixture city.
 - **End to end** (`e2e/`): a static scan of the build for CDN hostnames, then Playwright on the release build:
-  full 10/25/50 round games on the real map, zero requests outside the app's origin, offline reload and a full offline
+  full 10/25/50/100 round games on the real map, zero requests outside the app's origin, offline reload and a full offline
   game, stats persistence and export, update behaviour, viewport matrix (Chromium and WebKit), touch gestures,
   robustness (corrupt or full storage, double taps, hidden tab) and accessibility.
 

@@ -23,6 +23,25 @@ for (const [name, width, height] of sizes) {
       page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(await overflow()).toBeLessThanOrEqual(0);
 
+    // Length screen: all four buttons present, inside the viewport, >= 48 px tall
+    await button(page, 'Play').click();
+    await expect(button(page, '100 rounds')).toBeVisible();
+    for (const n of [10, 25, 50, 100]) {
+      const b = button(page, `${n} rounds`);
+      await b.scrollIntoViewIfNeeded();
+      const box = await b.boundingBox();
+      expect(box, `${n} rounds button`).not.toBeNull();
+      expect(box!.height).toBeGreaterThanOrEqual(48);
+      expect(box!.y).toBeGreaterThanOrEqual(0);
+      expect(box!.y + box!.height).toBeLessThanOrEqual(height);
+      expect(box!.x + box!.width).toBeLessThanOrEqual(width);
+    }
+    await button(page, '10 rounds').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1000);
+    await page.screenshot({ path: `/work/e2e/screenshots/${browserName}-${name}-length.png` });
+    expect(await overflow()).toBeLessThanOrEqual(0);
+    await openHome(page);
+
     await startGame(page, 10);
     await expect
       .poll(async () => {
