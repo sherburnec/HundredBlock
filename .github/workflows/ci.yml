@@ -13,3 +13,17 @@ jobs:
       - run: docker compose run --rm flutter flutter analyze
       - run: docker compose run --rm flutter flutter test
       - run: docker compose run --rm data pytest
+  android:
+    # Builds the APK from the same commit once the shared tests pass.
+    # Debug-signed (no secrets in CI): good for testing and as a build check, not for release.
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: docker compose build flutter
+      - run: docker compose run --rm android sh scripts/build_android.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hundred-block-debug-signed-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
