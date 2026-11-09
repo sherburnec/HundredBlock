@@ -129,7 +129,7 @@ Export shape (version 1). Best scores and averages are computed from `games` whe
 ## Phase 0 — Scaffold and Docker environment
 
 - [x] 0.1 `git init` (if needed). Add `.gitignore` (Flutter/Dart, `build/`, `.dart_tool/`, `data/raw/`, `e2e/node_modules`, `e2e/test-results`, `logs/`), `.dockerignore`, `.gitattributes` (`* text=auto eol=lf`), `.editorconfig` (LF, 2-space).
-- [ ] 0.2 `docker/flutter.Dockerfile`: pinned Flutter stable image (for example a `ghcr.io/cirruslabs/flutter:<exact-version>` tag; check the current stable tag and pin it). Add `git config --global --add safe.directory '*'`. Enable web (`flutter config --enable-web`), precache web only. Create a non-root user only if file ownership on bind mounts becomes a problem.
+- [x] 0.2 `docker/flutter.Dockerfile`: pinned Flutter stable image (for example a `ghcr.io/cirruslabs/flutter:<exact-version>` tag; check the current stable tag and pin it). Add `git config --global --add safe.directory '*'`. Enable web (`flutter config --enable-web`), precache web only. Create a non-root user only if file ownership on bind mounts becomes a problem.
 - [ ] 0.3 `docker-compose.yml` with services:
   - `flutter`: repo bind-mounted at `/app`, working dir `/app`, named volume for the pub cache.
   - `web-dev`: `flutter run -d web-server --web-hostname 0.0.0.0 --web-port 8080`, port 8080 published.
