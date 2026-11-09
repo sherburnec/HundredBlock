@@ -1,0 +1,55 @@
+# City definition for Burbank, CA. All city-specific pipeline input lives here.
+id = "burbank"
+name = "Burbank, CA"
+
+[boundary]
+source = "overture_division"      # Overture divisions / division_area
+name = "Burbank"
+region = "US-CA"
+country = "US"
+subtype = "locality"
+
+[map]
+pan_padding = 0.10                # pan limits = boundary bbox padded by 10%
+
+[streets]
+# Overture road classes drawn in the outline (drivable roads only)
+classes = ["motorway", "trunk", "primary", "secondary", "tertiary", "residential", "living_street", "unclassified"]
+# Classes that may form intersection prompts (no motorway, ramps, service)
+intersection_classes = ["primary", "secondary", "tertiary", "residential", "unclassified", "living_street"]
+
+[[tiers]]
+id = "tier1"
+name = "Street outline"
+landmarks = ["costco"]
+
+[[tiers.highlights]]
+label = "Olive"
+regex = "^Olive (Ave|Avenue)$"
+[[tiers.highlights]]
+label = "Magnolia"
+regex = "^Magnolia (Blvd|Boulevard)$"
+[[tiers.highlights]]
+label = "Burbank Blvd"
+regex = "^Burbank (Blvd|Boulevard)$"
+[[tiers.highlights]]
+label = "Glenoaks Blvd"
+regex = "^Glenoaks (Blvd|Boulevard)$"
+[[tiers.highlights]]
+label = "Verdugo"
+regex = "^Verdugo (Ave|Avenue)$"
+[[tiers.highlights]]
+label = "Hollywood Way"
+regex = "^Hollywood Way$"
+
+[[landmarks]]
+id = "costco"
+name = "Costco"
+search = "Costco"                 # matched against place name and brand
+# Only the main warehouse: exclude pharmacy, gas, ATM, etc.
+name_regex = "^Costco( Wholesale)?$"
+
+attribution = [
+  "© OpenStreetMap contributors",
+  "Map data from Overture Maps Foundation",
+]
