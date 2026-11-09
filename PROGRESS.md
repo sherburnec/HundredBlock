@@ -2,8 +2,8 @@
 
 Local only, no off-device backup (no git remote `origin`).
 
-- Current task: 0.3 (docker-compose.yml)
-- Done: 0.1, 0.2 (Dockerfile written, not yet built)
-- Last command: none yet
+- Phase 0 complete. Exit criteria passed.
+- Current task: 1.1 (evaluate maplibre_gl)
+- Last command: `docker compose up -d serve` OK (serve container running on 8081)
 - Half-finished: nothing
-- Next step: write docker/flutter.Dockerfile with a pinned Flutter image tag
+- Next step: check pub.dev maplibre_gl version/web issues, log in DECISIONS.md

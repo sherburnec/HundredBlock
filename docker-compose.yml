@@ -1,0 +1,57 @@
+services:
+  flutter:
+    build:
+      context: .
+      dockerfile: docker/flutter.Dockerfile
+    image: hundredblock-flutter
+    working_dir: /app
+    volumes:
+      - .:/app
+      - pub-cache:/root/.pub-cache
+
+  web-dev:
+    image: hundredblock-flutter
+    depends_on: [flutter]
+    working_dir: /app
+    volumes:
+      - .:/app
+      - pub-cache:/root/.pub-cache
+    ports:
+      - "8080:8080"
+    command: flutter run -d web-server --web-hostname 0.0.0.0 --web-port 8080
+
+  data:
+    build:
+      context: .
+      dockerfile: docker/data.Dockerfile
+    image: hundredblock-data
+    working_dir: /app
+    volumes:
+      - .:/app
+      - raw-data:/app/data/raw
+
+  serve:
+    image: nginx:1.27.3-alpine
+    volumes:
+      - ./build/web:/usr/share/nginx/html:ro
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "8081:80"
+
+  e2e:
+    build:
+      context: .
+      dockerfile: docker/e2e.Dockerfile
+    image: hundredblock-e2e
+    depends_on: [serve]
+    working_dir: /work/e2e
+    environment:
+      BASE_URL: http://serve
+    volumes:
+      - ./e2e:/work/e2e
+      - ./build/web:/work/build/web:ro
+      - ./scripts:/work/scripts:ro
+
+volumes:
+  pub-cache:
+  raw-data:

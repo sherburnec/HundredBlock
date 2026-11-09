@@ -130,23 +130,23 @@ Export shape (version 1). Best scores and averages are computed from `games` whe
 
 - [x] 0.1 `git init` (if needed). Add `.gitignore` (Flutter/Dart, `build/`, `.dart_tool/`, `data/raw/`, `e2e/node_modules`, `e2e/test-results`, `logs/`), `.dockerignore`, `.gitattributes` (`* text=auto eol=lf`), `.editorconfig` (LF, 2-space).
 - [x] 0.2 `docker/flutter.Dockerfile`: pinned Flutter stable image (for example a `ghcr.io/cirruslabs/flutter:<exact-version>` tag; check the current stable tag and pin it). Add `git config --global --add safe.directory '*'`. Enable web (`flutter config --enable-web`), precache web only. Create a non-root user only if file ownership on bind mounts becomes a problem.
-- [ ] 0.3 `docker-compose.yml` with services:
+- [x] 0.3 `docker-compose.yml` with services:
   - `flutter`: repo bind-mounted at `/app`, working dir `/app`, named volume for the pub cache.
   - `web-dev`: `flutter run -d web-server --web-hostname 0.0.0.0 --web-port 8080`, port 8080 published.
   - `data`: Python image (Phase 2), repo mounted, has network.
   - `serve`: nginx (pinned) serving `build/web` read-only on port 8081 with gzip and sensible cache headers, mimicking GitHub Pages. Support serving under a sub-path for base-href testing.
   - `e2e`: pinned Playwright image, depends on `serve`.
-- [ ] 0.4 Create the Flutter project inside the container, web only: `docker compose run --rm flutter flutter create --platforms=web --project-name hundred_block --org com.hundredblock .` Then delete the template counter app and its test, set the app title and manifest name to "Hundred Block", add `analysis_options.yaml` with `flutter_lints`.
-- [ ] 0.5 `scripts/build_web.sh` (runs in container): `flutter pub get && flutter build web --release --no-web-resources-cdn --base-href "${BASE_HREF:-/}"`. Confirm the flag exists in the pinned Flutter version; if renamed, find the equivalent that bundles CanvasKit and fallback fonts locally and log it.
-- [ ] 0.6 Create `PROGRESS.md` (resume state, see `CLAUDE.md` Interruption and resume), `DECISIONS.md` (append-only log), `HANDOFF.md` (human steps, blockers, test instructions), and `README.md` (what it is, the Docker commands from `CLAUDE.md`, data attribution).
-- [ ] 0.7 Create a GitHub Actions workflow skeleton `.github/workflows/ci.yml` running format, analyze, test via `docker compose run`.
+- [x] 0.4 Create the Flutter project inside the container, web only: `docker compose run --rm flutter flutter create --platforms=web --project-name hundred_block --org com.hundredblock .` Then delete the template counter app and its test, set the app title and manifest name to "Hundred Block", add `analysis_options.yaml` with `flutter_lints`.
+- [x] 0.5 `scripts/build_web.sh` (runs in container): `flutter pub get && flutter build web --release --no-web-resources-cdn --base-href "${BASE_HREF:-/}"`. Confirm the flag exists in the pinned Flutter version; if renamed, find the equivalent that bundles CanvasKit and fallback fonts locally and log it.
+- [x] 0.6 Create `PROGRESS.md` (resume state, see `CLAUDE.md` Interruption and resume), `DECISIONS.md` (append-only log), `HANDOFF.md` (human steps, blockers, test instructions), and `README.md` (what it is, the Docker commands from `CLAUDE.md`, data attribution).
+- [x] 0.7 Create a GitHub Actions workflow skeleton `.github/workflows/ci.yml` running format, analyze, test via `docker compose run`.
 
-**Exit criteria (run and record):**
-- [ ] `docker compose build` succeeds from a clean state.
-- [ ] `docker compose run --rm flutter flutter analyze` and `flutter test` pass (add one trivial passing test if none exist).
-- [ ] `docker compose run --rm flutter sh scripts/build_web.sh` produces `build/web`.
-- [ ] `docker compose up -d serve` serves the build at `http://localhost:8081`.
-- [ ] `git status` shows no host-side toolchain artifacts; nothing was installed on the host.
+**Exit criteria (run and record):** PASSED 2026-11-08 (build, analyze, test, serve OK; static scan shows gstatic/googleapis strings in flutter.js/main.dart.js, to handle in 1.6)
+- [x] `docker compose build` succeeds from a clean state.
+- [x] `docker compose run --rm flutter flutter analyze` and `flutter test` pass (add one trivial passing test if none exist).
+- [x] `docker compose run --rm flutter sh scripts/build_web.sh` produces `build/web`.
+- [x] `docker compose up -d serve` serves the build at `http://localhost:8081`.
+- [x] `git status` shows no host-side toolchain artifacts; nothing was installed on the host.
 
 ---
 
